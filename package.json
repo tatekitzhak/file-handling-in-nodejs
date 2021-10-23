@@ -1,0 +1,34 @@
+{
+  "name": "ran-node-project",
+  "version": "1.0.0",
+  "description": "Implementation and build crud rest api using  Node JS, Express and MySQL",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tatekitzhak/nodejs-expressjs-mysql-api.git"
+  },
+  "keywords": [
+    "Reast",
+    "APIs",
+    "in",
+    "NodeJS",
+    "Express",
+    "and",
+    "MySQL"
+  ],
+  "author": "Ran Itzhak",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tatekitzhak/nodejs-expressjs-mysql-api/issues"
+  },
+  "homepage": "https://github.com/tatekitzhak/nodejs-expressjs-mysql-api#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.14"
+  }
+}
