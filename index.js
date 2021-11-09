@@ -15,9 +15,10 @@ app.get('/', (req, res) => {
     // files.forEach((file,index)=>{
     //   console.log('file:'+file[0])
     // })
+    res.send(data)
   })
   console.log("path:",directoryPath)
-  res.send('Hello Node!!')
+  
 })
 
 app.listen(port, () => {
