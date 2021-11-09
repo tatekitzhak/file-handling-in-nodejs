@@ -9,11 +9,15 @@ const readFile = require('./process_files/readFileLineByLine');
 const readDirFiles = require('./process_files/read_dir_files');
 
 app.get('/', (req, res) => {
-  const filePath = path.join(__dirname, 'static/file3.txt');
+  const filePath = path.join(__dirname, 'static/file1.txt');
   const dirPath = path.join(__dirname,'static/');
 
-  //readFile.readFileLineByLine(filePath);
-  readDirFiles.readFiles(dirPath);
+  const result = readFile.readFileLineByLine(filePath);
+
+  result.then(function(res) {
+    console.log('app: ',res);
+ })
+  //readDirFiles.readFiles(dirPath);
 
 
   res.send('Server runing...')

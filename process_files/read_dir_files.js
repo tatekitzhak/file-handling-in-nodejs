@@ -7,7 +7,7 @@ function readFiles(dirPath) {
             console.log('An unexpected error occurred:',err);
         }else{
             console.log('A file names:')
-            files.forEach(function(file){
+            files.forEach(function(file,index){
                 console.log(file)
             });
         }
