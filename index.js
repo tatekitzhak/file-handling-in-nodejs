@@ -1,26 +1,27 @@
 const path = require('path');
 const fs = require('fs');
-const express = require('express')
-const app = express()
-const port = 3000
+const readline = require('readline');
+const express = require('express');
+const app = express();
+const port = 3000;
 
 app.get('/', (req, res) => {
-  const directoryPath = path.join(__dirname, 'static/file.txt');
+  const directoryPath = path.join(__dirname, 'static/file1.txt');
 
-  fs.readFile(directoryPath, 'utf8', (err, data)=>{
-    if(err){
-      return console.log("unable to scan directory:"+err);
-    }
-    console.log('data:'+data)
-    // files.forEach((file,index)=>{
-    //   console.log('file:'+file[0])
-    // })
-    res.send(data)
-  })
-  console.log("path:",directoryPath)
+  function readFile(file) {
+    fs.readFile(directoryPath,'utf8', function(err, data){
+      if(err){
+        console.log('An occured error', err);
+      }
+      console.log('data: ',data);
+    });
+  };
+  readFile(directoryPath);
+res.send('Server runing...')
+console.log("path:",directoryPath)
   
 })
 
 app.listen(port, () => {
-  console.log(`Example index.js listening at http://localhost:${port}`)
+  console.log(`The source file index.js listening at: http://localhost:${port}`)
 })
