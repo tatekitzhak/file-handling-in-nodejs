@@ -5,22 +5,20 @@ const express = require('express');
 const app = express();
 const port = 3000;
 
-app.get('/', (req, res) => {
-  const directoryPath = path.join(__dirname, 'static/file1.txt');
+const readFile = require('./process_files/readFileLineByLine');
+const readDirFiles = require('./process_files/read_dir_files');
 
-  function readFile(file) {
-    fs.readFile(directoryPath,'utf8', function(err, data){
-      if(err){
-        console.log('An occured error', err);
-      }
-      console.log('data: ',data);
-    });
-  };
-  readFile(directoryPath);
-res.send('Server runing...')
-console.log("path:",directoryPath)
-  
-})
+app.get('/', (req, res) => {
+  const filePath = path.join(__dirname, 'static/file3.txt');
+  const dirPath = path.join(__dirname,'static/');
+
+  //readFile.readFileLineByLine(filePath);
+  readDirFiles.readFiles(dirPath);
+
+
+  res.send('Server runing...')
+  console.log("path:")
+});
 
 app.listen(port, () => {
   console.log(`The source file index.js listening at: http://localhost:${port}`)
