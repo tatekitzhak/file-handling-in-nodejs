@@ -5,19 +5,19 @@ const express = require('express');
 const app = express();
 const port = 3000;
 
-const readFile = require('./process_files/readFileLineByLine');
-const readDirFiles = require('./process_files/read_dir_files');
+const readFile = require('./process_files/readFileLines');
+const readDirFiles = require('./process_files/readDirFiles');
 
 app.get('/', (req, res) => {
   const filePath = path.join(__dirname, 'static/file1.txt');
   const dirPath = path.join(__dirname,'static/');
 
-  const result = readFile.readFileLineByLine(filePath);
+  //const result = readFile.readFileLineByLine(filePath);
 
-  result.then(function(res) {
-    console.log('app: ',res);
- })
-  //readDirFiles.readFiles(dirPath);
+//   result.then(function(res) {
+//     console.log('app: ',res);
+//  })
+  readDirFiles.readFiles(dirPath);
 
 
   res.send('Server runing...')
