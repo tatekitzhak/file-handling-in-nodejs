@@ -21,9 +21,11 @@ function readFiles(dirname, onFileContent, onError) {
 /*  Here's the storing part: 
 */
 
-var data = {};
+/* var data = {};
 readFiles('dirname/', function(filename, content) {
   data[filename] = content;
 }, function(err) {
-  throw err;
-});
+  console.log('Throw error:',err)
+}); */
+
+module.exports = {readFiles}
