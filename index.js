@@ -9,6 +9,7 @@ const readFile = require('./process_files/readFileLines');
 const readDirFiles = require('./process_files/readDirFiles');
 const readAllFilesDir = require('./process_files/readAllFilesDir');
 const callback = require('./process_files/callbackTest');
+const callback2 = require('./process_files/callbackTest2');
 
 app.get('/', (req, res) => {
   const filePath = path.join(__dirname, 'static/file1.txt');
@@ -32,8 +33,10 @@ app.get('/', (req, res) => {
 
   });
  */
-callback.callbackFunc();
-  res.send('Server runing...')
+/* callback.callbackFunc();
+ */  
+  callback2.callbackFunc2();
+ res.send('Server runing...')
   console.log("result:")
 });
 

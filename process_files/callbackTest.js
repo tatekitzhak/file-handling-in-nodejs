@@ -2,29 +2,29 @@
 function callbackFunc() {
 
 
-    function download(url, success, failure) {
+    function download(url, successCallback, failureCallback) {
         setTimeout(() => {
             // script to download the picture here
-            console.log(`Downloading ${url} ...`);
+            console.log(`Downloading: ${url} ...`);
             // over simplification
             let error = url.length === 0 || !url; 
             // call the failure or success callback
-            error ? failure(url) :  success(url);
+            error ? failureCallback('Occurred error') :  successCallback(url);
             
         }, 3000);
     };
 
    
-    let url = 'https';
+    let value = '';
+    function successCallback(picture) {
+        console.log(`Processing the picture ${picture}`);
+    };
 
-    download('p',
-        function(picture) {
-            console.log(`Processing the picture ${picture}`);
-        },
-        function(){
-            console.log(`Handling error...`);
-        }
-    );
+    function failureCallback(err) {
+        console.log(`Handling error:${err}`);
+    };
+
+    download(value,successCallback,failureCallback);
 
 }
 
