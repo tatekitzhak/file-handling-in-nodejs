@@ -1,5 +1,7 @@
 
 function callbackFunc2() {
+
+    
     function whatIsFullName(fullName) {
         console.log(fullName);
     };
