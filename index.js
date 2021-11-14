@@ -23,19 +23,17 @@ app.get('/', (req, res) => {
 /*   readDirFiles.readFiles(dirPath);
  */
 //var data = [];
-  /* 
+  
   readAllFilesDir.readFiles(dirPath,function(filename, content) {
     var data = [];
+    console.log('content:', content)
     data.push(content);
-    console.log('content:',data)
+    console.log('Array data:',data)
   }, function(err) {
     console.log('Throw error:', err)
 
   });
- */
-/* callback.callbackFunc();
- */  
-  callback2.callbackFunc2();
+
  res.send('Server runing...')
   console.log("result:")
 });

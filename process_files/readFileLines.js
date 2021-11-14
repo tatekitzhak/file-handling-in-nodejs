@@ -13,6 +13,7 @@ async function readFileLineByLine(filePath) {
         input: fileStream,
         crlfDelay: Infinity
       });
+      
       for await (const line of rl) {
         tempData.push( line );
       

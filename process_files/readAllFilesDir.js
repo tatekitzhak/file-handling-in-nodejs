@@ -1,18 +1,21 @@
 var fs = require('fs');
 
 function readFiles(dirname, onFileContent, onError) {
+    
   fs.readdir(dirname, function(err, filenames) {
-    if (err) {
-      onError(err);
+    if (err){
+      onError(`Occuerd a error:${err}`);
       return;
     }
-    filenames.forEach(function(filename) {
+
+    filenames.forEach(function(filename, i) {
+        console.log('File name:', i, filename);
       fs.readFile(dirname + filename, 'utf-8', function(err, content) {
         if (err) {
-          onError(err);
+            onError(`Occuerd a error:${err}`);
           return;
         }
-        onFileContent(filename, content);
+        console.log('File Content:',i, content);
       });
     });
   });
