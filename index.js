@@ -23,16 +23,19 @@ app.get('/', (req, res) => {
 /*   readDirFiles.readFiles(dirPath);
  */
 //var data = [];
-  
-  readAllFilesDir.readFiles(dirPath,function(filename, content) {
-    var data = [];
-    console.log('content:', content)
-    data.push(content);
-    console.log('Array data:',data)
-  }, function(err) {
-    console.log('Throw error:', err)
 
-  });
+function proccesContent(files) {
+  console.log('Files:', files)
+}
+
+function reciveContent(filename, content) {
+  var data = [];
+  console.log('content:', content)
+  data.push(content);
+  console.log('Array data:',data)
+}
+
+readAllFilesDir.readFiles(dirPath,reciveContent, proccesContent);
 
  res.send('Server runing...')
   console.log("result:")

@@ -13,12 +13,12 @@ async function readFileLineByLine(filePath) {
         input: fileStream,
         crlfDelay: Infinity
       });
-      
+
       for await (const line of rl) {
         tempData.push( line );
       
         // Each line in input.txt will be successively available here as `line`.
-        console.log(`Line from file: ${line}`);
+        //console.log(`Line from file: ${line}`);
       }
       return tempData;
       
