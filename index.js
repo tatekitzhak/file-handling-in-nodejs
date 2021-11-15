@@ -24,21 +24,20 @@ app.get('/', (req, res) => {
  */
 //var data = [];
 
-function proccesContent(files) {
-  console.log('Files:', files)
+function errorHandling(err) {
+  // console.log('Files:', err)
+  throw err;
 }
 
-function reciveContent(filename, content) {
-  var data = [];
-  console.log('content:', content)
-  data.push(content);
-  console.log('Array data:',data)
+function receiveContent(content) {
+  
+  console.log('Content:', content);
 }
 
-readAllFilesDir.readFiles(dirPath,reciveContent, proccesContent);
+readAllFilesDir.readFiles(dirPath,receiveContent, errorHandling);
 
- res.send('Server runing...')
-  console.log("result:")
+ res.send('Server runing...');
+ 
 });
 
 app.listen(port, () => {

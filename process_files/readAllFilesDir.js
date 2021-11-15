@@ -1,56 +1,42 @@
 var fs = require('fs');
 const path = require('path');
 const readFile = require('./readFileLines');
-
+/* -----------guide-----------
+    https://stackoverflow.com/questions/10049557/reading-all-files-in-a-directory-store-them-in-objects-and-send-the-object
+*/
 let filesContentArrayList = [];
-function readFiles(dirname, onFileContent, callback) {
+function readFiles(dirname, onFileContent, occurredError) {
     
   fs.readdir(dirname, function(err, filenames) {
     if (err){
-      onError(`Occuerd a error:${err}`);
+        occurredError(`Error has occurred :${err}`);
       return;
     }
     let resultFileLines;
-    
     filenames.forEach(function(filename, i) {
         
         if(path.extname(filename) == ".txt"){
             resultFileLines = readFile.readFileLineByLine(dirname + filename);
-            resultFileLines.then(function(resArray){
-                filesContentArrayList.push(resArray);
-                console.log('Singel file content:', i,resArray);  
+            resultFileLines.then(function(result_as_an_array ){
+                //filesContentArrayList.push(resArray);
+                var element = {};
+              
+                element = result_as_an_array;
+                filesContentArrayList.push({element});
+                console.log('Singel file content:', i,result_as_an_array);  
             }).catch((err) => {
-                console.log('err:', err);
+                console.log(`Catch statement error has occurred :${err}`);
             }).finally(() => {
-                console.log('Files array:', filesContentArrayList)
+                if(i==2)
+                    console.log('The final result as an array list of content each file:', filesContentArrayList)
             });
         }
-
-        
-       /*  
-        console.log('File name:', i, filename);
-        fs.readFile(dirname + filename, 'utf-8', function(err, content) {
-        if (err) {
-            onError(`Occuerd a error:${err}`);
-            return;
-        }
-        console.log('File Content:',i, content);
-        }); 
-        */
     });
-    callback(filesContentArrayList)
+    onFileContent(filesContentArrayList)
   });
   
 }
 
-/*  Here's the storing part: 
-*/
 
-/* var data = {};
-readFiles('dirname/', function(filename, content) {
-  data[filename] = content;
-}, function(err) {
-  console.log('Throw error:',err)
-}); */
 
 module.exports = {readFiles}
