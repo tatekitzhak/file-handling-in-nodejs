@@ -1,5 +1,7 @@
 var fs = require('fs');
+const path = require('path');
 const readFile = require('./readFileLines');
+
 let filesContentArrayList = [];
 function readFiles(dirname, onFileContent, callback) {
     
@@ -8,18 +10,23 @@ function readFiles(dirname, onFileContent, callback) {
       onError(`Occuerd a error:${err}`);
       return;
     }
+    let resultFileLines;
     
     filenames.forEach(function(filename, i) {
-        const result = readFile.readFileLineByLine(dirname + filename);
+        
+        if(path.extname(filename) == ".txt"){
+            resultFileLines = readFile.readFileLineByLine(dirname + filename);
+            resultFileLines.then(function(resArray){
+                filesContentArrayList.push(resArray);
+                console.log('Singel file content:', i,resArray);  
+            }).catch((err) => {
+                console.log('err:', err);
+            }).finally(() => {
+                console.log('Files array:', filesContentArrayList)
+            });
+        }
 
-        result.then(function(res){
-            filesContentArrayList.push(res);
-            console.log('Singel file content:', i,res);  
-        }).catch((err) => {
-            console.log('err:', err);
-        }).finally(() => {
-            console.log('Files array:', filesContentArrayList)
-        });
+        
        /*  
         console.log('File name:', i, filename);
         fs.readFile(dirname + filename, 'utf-8', function(err, content) {
