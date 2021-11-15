@@ -31,7 +31,17 @@ function errorHandling(err) {
 
 function receiveContent(content) {
   
-  console.log('Content::', content);
+  console.log('Content:', content);
+  var jsonObj = JSON.stringify(content);
+  
+  fs.writeFile("output.json", jsonObj, 'utf8', function(err) {
+    if (err) {
+       console.log("An error occured while writing JSON Object to File.");
+       return console.log(err);
+    }
+ 
+    console.log("JSON file has been saved.");
+ });
 }
 
 readAllFilesDir.readFiles(dirPath,receiveContent, errorHandling);

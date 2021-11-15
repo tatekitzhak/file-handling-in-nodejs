@@ -13,17 +13,16 @@ function readFiles(dirname, onFileContent, occurredError) {
       return;
     }
     let resultFileLines;
-    console.log('length:',filenames.length)
+   
     filenames.forEach(function(filename, i) {
-        
         if(path.extname(filename) == ".txt"){
             resultFileLines = readFile.readFileLineByLine(dirname + filename);
             resultFileLines.then(function(result_as_an_array ){
-                //filesContentArrayList.push(resArray);
-                var element = {};
-              
-                element = result_as_an_array;
-                filesContentArrayList.push({element});
+                let element = {};
+                let baseFileName = path.parse(filename).name;
+                
+                element[baseFileName] = result_as_an_array;
+                filesContentArrayList.push(element);
                 console.log('Singel file content:', i,result_as_an_array);  
             }).catch((err) => {
                 console.log(`Catch statement error has occurred :${err}`);
