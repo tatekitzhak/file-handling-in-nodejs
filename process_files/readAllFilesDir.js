@@ -13,6 +13,7 @@ function readFiles(dirname, onFileContent, occurredError) {
       return;
     }
     let resultFileLines;
+    console.log('length:',filenames.length)
     filenames.forEach(function(filename, i) {
         
         if(path.extname(filename) == ".txt"){
@@ -27,14 +28,14 @@ function readFiles(dirname, onFileContent, occurredError) {
             }).catch((err) => {
                 console.log(`Catch statement error has occurred :${err}`);
             }).finally(() => {
-                if(i==2)
+                if(i==2){ 
+                    onFileContent(filesContentArrayList)                   
                     console.log('The final result as an array list of content each file:', filesContentArrayList)
-            });
+                }            
+        });
         }
     });
-    onFileContent(filesContentArrayList)
   });
-  
 }
 
 

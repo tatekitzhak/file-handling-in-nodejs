@@ -31,7 +31,7 @@ function errorHandling(err) {
 
 function receiveContent(content) {
   
-  console.log('Content:', content);
+  console.log('Content::', content);
 }
 
 readAllFilesDir.readFiles(dirPath,receiveContent, errorHandling);
