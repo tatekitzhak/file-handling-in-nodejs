@@ -14,7 +14,7 @@ app.get('/', function(req, res){
   const dirPath = path.join(__dirname,'static/topics/');
   const dirJsonFile = path.join(__dirname,'static/output.json');
 
-  
+ /*  
  function errorHandling(err) {
     // console.log('Files:', err)
     throw err;
@@ -35,11 +35,24 @@ app.get('/', function(req, res){
   }
 
   readAllFilesDir.readFilesHandle(dirPath,receiveContent, errorHandling);
-
+ */
   jsonReaderHandle.jsonReader(dirJsonFile, function(content){
-    console.log('Content1:', content);
-    var jsonObj = JSON.stringify(content);
-    console.log('Content2:', jsonObj);
+    //console.log('Content1:', content);
+    /* var jsonObj = JSON.stringify(content);
+    console.log('Content2:', jsonObj); */
+
+    
+      
+     
+      content.forEach(function(obj ,i){
+        
+        for (const nameFile in obj) {
+          console.log(`Content ${i} : ${nameFile} = ${obj[nameFile].length}`);
+        }
+      });
+   
+    
+   
     res.send(content);
   });
   
