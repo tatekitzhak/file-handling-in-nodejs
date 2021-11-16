@@ -1,42 +1,62 @@
 var fs = require('fs');
 const path = require('path');
+const readline = require('readline');
 const readFile = require('./readFileLines');
 /* -----------guide-----------
     https://stackoverflow.com/questions/10049557/reading-all-files-in-a-directory-store-them-in-objects-and-send-the-object
 */
-let filesContentArrayList = [];
-function readFiles(dirname, onFileContent, occurredError) {
-    
-  fs.readdir(dirname, function(err, filenames) {
-    if (err){
-        occurredError(`Error has occurred :${err}`);
-      return;
-    }
-    let resultFileLines;
-   
-    filenames.forEach(function(filename, i) {
-        if(path.extname(filename) == ".txt"){
-            resultFileLines = readFile.readFileLineByLine(dirname + filename);
-            resultFileLines.then(function(result_as_an_array ){
-                let element = {};
-                let baseFileName = path.parse(filename).name;
-                
-                element[baseFileName] = result_as_an_array;
-                filesContentArrayList.push(element);
-                console.log('Singel file content:', i,result_as_an_array);  
-            }).catch((err) => {
-                console.log(`Catch statement error has occurred :${err}`);
-            }).finally(() => {
-                if(i==2){ 
-                    onFileContent(filesContentArrayList)                   
-                    console.log('The final result as an array list of content each file:', filesContentArrayList)
-                }            
-        });
+
+async function readFileLineByLine(filePath){
+    const fileStream = fs.createReadStream(filePath);
+    var tempData = [];
+    const rl = readline.createInterface({
+        input: fileStream,
+        crlfDelay: Infinity
+      });
+
+      for await (const line of rl) {
+        
+        tempData.push( line );
+      
+        // Each line in input.txt will be successively available here as `line`.
+        console.log(`Line from file: ${line}`);
+      }
+      return tempData;
+      
+}
+
+function readFilesHandle(dirname, onFileContent, occurredError) {
+    let filesContentArrayList = [];
+    fs.readdir(dirname, function(err, filenames) {
+        if (err){
+            occurredError(`Error has occurred :${err}`);
+            return;
         }
+        let resultFileLines;
+        let filesLength = filenames.length;
+        filenames.forEach(function(filename, i) {
+            if(path.extname(filename) == ".txt"){
+                resultFileLines = readFileLineByLine(dirname + filename);
+                resultFileLines.then(function(result_as_an_array ){
+                    var specificFileSchemaObject = {};
+                    let baseFileName = path.parse(filename).name;
+                    specificFileSchemaObject[baseFileName] = result_as_an_array;
+                    filesContentArrayList.push(specificFileSchemaObject);
+                    console.log('Singel file content:', i,result_as_an_array);  
+                }).catch((err) => {
+                    console.log(`Catch statement error has occurred :${err}`);
+                }).finally(() => {
+                    if(i==(filesLength-1)){ 
+                        onFileContent(filesContentArrayList)                   
+                        console.log('The final result as an array list of content each file:', filesContentArrayList)
+                    }   
+                            
+                });
+            }
+        });
     });
-  });
 }
 
 
 
-module.exports = {readFiles}
+module.exports = {readFilesHandle}
