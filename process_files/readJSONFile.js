@@ -31,8 +31,8 @@ function jsonReader(filePath, cb){
             console.log('File data:',object);
             return cb && cb(object)
         } catch(err) {
-            console.log('Error parsing JSON string:', err)
-            return cb && cb(err)
+            console.log(`Error parsing JSON string: ${err}`)
+            return cb && cb(`Error parsing JSON string: ${err}`)
         }
     });
 }
