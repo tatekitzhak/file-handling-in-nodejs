@@ -57,10 +57,16 @@ app.get('/json_reader', function(req, res){
   res.send(req.route.path);
 });
 /*  
-  Route for MySQL Database
+  MySQL Database
 */ 
 app.get("/mysql_database", (req, res) => {
-  database.database_connection();
+  
+  database.database_connection(function(successfulData){
+    console.log(`Database Connection: ${successfulData}`)
+  },function(err){
+    console.log(`Error Establishing a Database Connection: ${err}`)
+  });
+
   res.json({ message: "MySQL Database..." });
 });
 
