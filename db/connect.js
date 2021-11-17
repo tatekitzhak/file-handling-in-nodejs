@@ -20,16 +20,37 @@ function database_connection(successfulHadle, errorHadle) {
         if (err){
             return errorHadle && errorHadle(`The execution line of code function : database_connection() ${err}`);
         }
-
         successfulHadle(`The database connection is successful to the MySQL server`);
     });  
+    
+    //Inserting into a database
+    let usersInfo = {
+        first_name: "Ran",
+        last_name: "Itzhak",
+        user_type: "Software Engineer",
+        username: "RanItzhak",
+        email: "ran@gmail.com",
+        password: "1234"
+    };
+    let sqlQuery = "INSERT INTO users SET ?";
+    db_connection.query(sqlQuery, usersInfo, (err, result) => {
+        if (err)
+            console.log(`INSERT error o ${err}`);;
+        console.log(result);
+        console.log("an office added...");
+    });
 
     // Querying Data in MySQL Database
     let sql = "SELECT first_name FROM users";
     db_connection.query(sql, function (err, result, fields) {
         
-        if (err) throw err;
+        if(err || !result.length){
+            console.log(`error or no results ${err}`);
+            //return callback('error or no results');
+        }
         console.log(`The query result: ${JSON.stringify(result)}`);
+        //callback(null, result);
+
     });
     
     // close all connections
