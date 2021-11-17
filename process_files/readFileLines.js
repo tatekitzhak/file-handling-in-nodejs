@@ -5,7 +5,6 @@ const readline = require('readline');
 */
 
 
-
 async function readFileLineByLine(filePath) {
     const fileStream = fs.createReadStream(filePath);
     var tempData = [];

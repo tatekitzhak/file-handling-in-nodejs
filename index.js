@@ -14,10 +14,9 @@ const dirJsonFile = path.join(__dirname,'static/output.json');
 app.get('/', function(req, res){
   const dirPath = path.join(__dirname,'static/topics/');
   
- 
   function errorHandling(err) {
-    // console.log('Files:', err)
-    throw err;
+    console.log('Reading directory issues:', err)
+    
   }
 
   function receiveContent(content) {
@@ -30,7 +29,7 @@ app.get('/', function(req, res){
         return console.log(err);
       }
   
-      console.log("JSON file has been saved.");
+      console.log(`Write a JSON file and has been saved at :${dirJsonFile}`);
     });
   }
 
@@ -49,12 +48,13 @@ app.get('/json_reader', function(req, res){
         for (const nameFile in obj) {
           console.log(`----------${index}-----------`)
           for(let i=0; i < obj[nameFile].length; i++)
-          console.log(`Content ${index} : [${nameFile}] = ${obj[nameFile][i]}`);
-          
+            console.log(`Content ${index} : [${nameFile}] = ${obj[nameFile][i]}`);
         }
       });
-    
+  },function(err){
+    console.log('Error Handling:', err)
   });
+
   res.send(req.route.path);
 });
 
