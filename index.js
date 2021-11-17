@@ -4,11 +4,10 @@ const express = require('express');
 const app = express();
 const port = 3000;
 
-const readDirFiles = require('./process_files/readDirFiles');
 const readAllFilesDir = require('./process_files/readAllFilesDir');
-const callback = require('./process_files/callbackTest');
-const callback2 = require('./process_files/callbackTest2');
 const jsonReaderHandle = require('./process_files/readJSONFile');
+const database = require('./db/connect');
+
 const dirJsonFile = path.join(__dirname,'static/output.json');
 
 app.get('/', function(req, res){
@@ -56,6 +55,13 @@ app.get('/json_reader', function(req, res){
   });
 
   res.send(req.route.path);
+});
+/*  
+  Route for MySQL Database
+*/ 
+app.get("/mysql_database", (req, res) => {
+  database.database_connection();
+  res.json({ message: "MySQL Database..." });
 });
 
 app.listen(port, function(err){
