@@ -6,7 +6,7 @@ const db_config = {
     host    : '127.0.0.1',
     user    : 'ran',
     password: 'ran',
-    database: 'db1',//'topics_db'
+    database: 'db1',
     debug: false,
   };
 var db_connection;
@@ -40,7 +40,7 @@ function database_connection(successfulHadle, errorHadle) {
         console.log("an office added...");
     });
 
-    // Querying Data in MySQL Database
+    //SELECT Querying Data in MySQL Database
     let sql = "SELECT first_name FROM users";
     db_connection.query(sql, function (err, result, fields) {
         
@@ -53,6 +53,10 @@ function database_connection(successfulHadle, errorHadle) {
 
     });
     
+
+
+
+
     // close all connections
     db_connection.end(function(err) {
 

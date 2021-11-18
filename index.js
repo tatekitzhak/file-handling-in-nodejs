@@ -4,10 +4,10 @@ const express = require('express');
 const app = express();
 const port = 3000;
 
-const readAllFilesDir = require('./process_files/readAllFilesDir');
-const jsonReaderHandle = require('./process_files/readJSONFile');
-const database = require('./db/connect');
-
+const readAllFilesDir = require('./process-files/readAllFilesDir');
+const jsonReaderHandle = require('./process-files/readJSONFile');
+const database = require('./mysql-connection/connect');
+const db = require('./mysql-connection/db');
 const dirJsonFile = path.join(__dirname,'static/output.json');
 
 app.get('/', function(req, res){
@@ -59,16 +59,29 @@ app.get('/json_reader', function(req, res){
 /*  
   MySQL Database
 */ 
-app.get("/mysql_database", (req, res) => {
+app.get("/mysql_database", function(req, res){
   
   database.database_connection(function(successfulData){
+    
     console.log(`Database Connection: ${successfulData}`)
-  },function(err){
+  }, function(err){
     console.log(`Error Establishing a Database Connection: ${err}`)
   });
 
   res.json({ message: "MySQL Database..." });
 });
+
+app.get('/db',function(req, res) {
+  db.dbCnnection(function(successfulData){
+    
+    console.log(`DB Connection: ${successfulData}`)
+  }, function(err){
+    console.log(`Error Establishing a DB Connection: ${err}`)
+  });
+  
+  res.json({ message: "MySQL DB is connection..." });
+});
+
 
 app.listen(port, function(err){
   if (err) {
