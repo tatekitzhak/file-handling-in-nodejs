@@ -79,6 +79,7 @@ app.get('/db',function(req, res) {
     console.log(`Error Establishing a DB Connection: ${err}`)
   });
   
+
   res.json({ message: "MySQL DB is connection..." });
 });
 
