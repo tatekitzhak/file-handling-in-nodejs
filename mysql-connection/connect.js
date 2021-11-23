@@ -41,7 +41,7 @@ function database_connection(successfulHadle, errorHadle) {
     });
 
     //SELECT Querying Data in MySQL Database
-    let sql = "SELECT first_name FROM users";
+    let sql = "SELECT last_name FROM users";
     db_connection.query(sql, function (err, result, fields) {
         
         if(err || !result.length){
@@ -54,10 +54,6 @@ function database_connection(successfulHadle, errorHadle) {
     });
     
 
-
-
-
-    // close all connections
     db_connection.end(function(err) {
 
         if (err) {

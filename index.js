@@ -72,14 +72,15 @@ app.get("/mysql_database", function(req, res){
 });
 
 app.get('/db',function(req, res) {
-  db.dbCnnection(function(successfulData){
+
+  /* db.dbCnnection(function(successfulData){
     
     console.log(`DB Connection: ${successfulData}`)
   }, function(err){
     console.log(`Error Establishing a DB Connection: ${err}`)
   });
-  
-
+   */
+  db.db_connection;
   res.json({ message: "MySQL DB is connection..." });
 });
 
