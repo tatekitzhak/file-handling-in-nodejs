@@ -71,8 +71,14 @@ app.get("/mysql_database", function(req, res){
   res.json({ message: "MySQL Database..." });
 });
 
+
+
+const Cat = require('./mysql-connection/db_test');
+const area = require('./mysql-connection/db_2');
 app.get('/db',function(req, res) {
 
+  const cat = new Cat();
+//console.log('Cat:',cat.makeSound());
   /* db.dbCnnection(function(successfulData){
     
     console.log(`DB Connection: ${successfulData}`)
@@ -80,8 +86,8 @@ app.get('/db',function(req, res) {
     console.log(`Error Establishing a DB Connection: ${err}`)
   });
    */
-  db.db_connection;
-  res.json({ message: "MySQL DB is connection..." });
+  //db.db_connection;
+  res.json(area.area(3));
 });
 
 

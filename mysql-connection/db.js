@@ -34,7 +34,6 @@ var db_connection;
 
     });
     function solution(a) {
-        // write your code in JavaScript (Node.js 8.9.4)
         console.log(`A array ${a}`);
 
         let temp1 = a[0];
@@ -52,7 +51,7 @@ var db_connection;
         return;
     }
 
-    solution( [1,2,3,4,5] );
+   // solution( [1,2,3,4,5] );
 /* } */
 
 module.exports = db_connection;
