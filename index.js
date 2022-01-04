@@ -11,7 +11,7 @@ const db = require('./mysql-connection/db');
 const dirJsonFile = path.join(__dirname, 'static/output.json');
 
 app.get('/', function (req, res) {
-  const dirPath = path.join(__dirname, 'static/topics/');
+  const dirPath = path.join(__dirname, 'static/test_topics/');
 
   function errorHandling(err) {
     console.log('Reading directory issues:', err)
@@ -33,8 +33,8 @@ app.get('/', function (req, res) {
   }
 
   readAllFilesDir.readFilesHandle(dirPath, receiveContent, errorHandling);
-
-  res.send('http://localhost:3000 ...');
+  console.log('receiveContent():',dirJsonFile)
+  res.send('http://localhost:8000 ...');
 
 });
 
@@ -56,6 +56,8 @@ app.get('/json_reader', function (req, res) {
 
   res.send(req.route.path);
 });
+
+
 /*  
   MySQL Database
 */
@@ -80,8 +82,7 @@ app.get('/db', function (req, res) {
 
   db_2.database_connection(function (successful) {
 
-    console.log(`Database Connection: ${successful}`);
-    console.log('successful:',successful)
+    console.log(`Database Connection message: ${successful}`);
   }, function (err) {
     console.log(`Error Establishing a Database Connection: ${err}`)
   });
@@ -89,6 +90,14 @@ app.get('/db', function (req, res) {
   res.json(db_2.database_connection());
 });
 
+/* *************
+* read a JSON file
+*/
+const readJSON = require('./read-json-file/readJSONFile');
+
+app.get('/readJSONFile',function(req, res){
+  readJSON.readJSONFile();
+});
 
 app.listen(port, function (err) {
   if (err) {
