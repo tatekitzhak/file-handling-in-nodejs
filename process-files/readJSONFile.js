@@ -10,7 +10,7 @@ function jsonReader(filePath, cb){
         }
         try {
             const object = JSON.parse(fileData)
-            console.log('File data:',object);
+            //console.log('File data:',object);
             return cb && cb(null, object)
         } catch(err) {
             return cb && cb({message: `Error parsing JSON string: ${err}`})

@@ -63,11 +63,8 @@ const db_2 = require('./mysql-connection/db_2');
 
 app.get('/db_2', function (req, res) {
 
-  db_2.database_connection(function (successful) {
-
-    console.log(`Database Connection message: ${successful}`);
-  }, function (err) {
-    console.log(`Error Establishing a Database Connection: ${err}`)
+  db_2.database_connection(null, function (ms) {
+    console.log(`Database Connection message: ${ms}`)
   });
 
   res.json(db_2.database_connection());
@@ -91,10 +88,13 @@ app.get('/json_file_reader', function (req, res) {
 
       for (const fileName in obj) {
         console.log(`----------${index}-----------`)
-        for (let i = 0; i < obj[fileName].length; i++){
+        /* for (let i = 0; i < obj[fileName].length; i++){
           const str = obj[fileName][i]; 
           console.log(`Row in file [${fileName}] : ${str}`);
-        }
+        } */
+        db_2.database_connection(obj, function (ms) {
+          console.log(`Database Connection message: ${ms}`)
+        });
       }
       
     }); // => "Infinity Loop Drive"
