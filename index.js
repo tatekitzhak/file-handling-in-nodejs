@@ -4,11 +4,11 @@ const express = require('express');
 const app = express();
 const port = 8000;
 
+const jsonFilePath = path.join(__dirname, 'static/output.json');
+
 const readAllFilesDir = require('./process-files/readAllFilesDir');
-const jsonReaderHandle = require('./process-files/readJSONFile');
 const database = require('./mysql-connection/connect');
 const db = require('./mysql-connection/db');
-const dirJsonFile = path.join(__dirname, 'static/output.json');
 
 app.get('/', function (req, res) {
   const dirPath = path.join(__dirname, 'static/test_topics/');
@@ -22,40 +22,24 @@ app.get('/', function (req, res) {
     console.log('Content:', content);
     var jsonObj = JSON.stringify(content);
 
-    fs.writeFile(dirJsonFile, jsonObj, 'utf8', function (err) {
+    fs.writeFile(jsonFilePath, jsonObj, 'utf8', function (err) {
       if (err) {
         console.log("An error occured while writing JSON Object to File.");
         return console.log(err);
       }
 
-      console.log(`Write a JSON file and has been saved at :${dirJsonFile}`);
+      console.log(`Write a JSON file and has been saved at :${jsonFilePath}`);
     });
   }
 
   readAllFilesDir.readFilesHandle(dirPath, receiveContent, errorHandling);
-  console.log('receiveContent():',dirJsonFile)
+  console.log('receiveContent():',jsonFilePath)
   res.send('http://localhost:8000 ...');
 
 });
 
 
-app.get('/json_reader', function (req, res) {
-  jsonReaderHandle.jsonReader(dirJsonFile, function (content) {
 
-    content.forEach(function (obj, index) {
-
-      for (const nameFile in obj) {
-        console.log(`----------${index}-----------`)
-        for (let i = 0; i < obj[nameFile].length; i++)
-          console.log(`Content ${index} : [${nameFile}] = ${obj[nameFile][i]}`);
-      }
-    });
-  }, function (err) {
-    console.log('Error Handling:', err)
-  });
-
-  res.send(req.route.path);
-});
 
 
 /*  
@@ -74,11 +58,10 @@ app.get("/mysql_database", function (req, res) {
 });
 
 
-
 const Cat = require('./mysql-connection/db_test');
 const db_2 = require('./mysql-connection/db_2');
 
-app.get('/db', function (req, res) {
+app.get('/db_2', function (req, res) {
 
   db_2.database_connection(function (successful) {
 
@@ -92,16 +75,37 @@ app.get('/db', function (req, res) {
 
 /* *************
 * read a JSON file
+* https://heynode.com/tutorial/readwrite-json-files-nodejs/
 */
-const readJSON = require('./read-json-file/readJSONFile');
 
-app.get('/readJSONFile',function(req, res){
-  readJSON.readJSONFile();
+const jsonReaderHandle = require('./process-files/readJSONFile');
+
+app.get('/json_file_reader', function (req, res) {
+  jsonReaderHandle.jsonReader(jsonFilePath, function (err, data) {
+    if (err) {
+      console.log('Error Handling:', err)
+      return;
+    }
+
+    data.forEach(function (obj, index) {
+
+      for (const fileName in obj) {
+        console.log(`----------${index}-----------`)
+        for (let i = 0; i < obj[fileName].length; i++){
+          const str = obj[fileName][i]; 
+          console.log(`Row in file [${fileName}] : ${str}`);
+        }
+      }
+      
+    }); // => "Infinity Loop Drive"
+  });
+
+  res.send(req.route.path);
 });
 
 app.listen(port, function (err) {
   if (err) {
-    throw err;
+    console.log(`app.listen:${err}`);
   }
   console.log(`Node Endpoints working at: http://localhost:${port}`)
 });

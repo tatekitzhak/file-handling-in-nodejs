@@ -11,36 +11,46 @@ const db_config = {
 };
 var db_connection;
 
-function database_connection(successfulHadle, errorHadle) {
+function database_connection(data, cb) {
 
   db_connection = mysql.createConnection(db_config); //Connecting to MySQL database server
 
   db_connection.connect(function (err) {
     if (err) {
-      return errorHadle && errorHadle(`The execution line of code function : database_connection() ${err}`);
+      return cb && cb(`The execution line of code function : database_connection() ${err}`);
     }
-    return successfulHadle && successfulHadle(JSON.stringify({ 1: `The database connection is successful to the MySQL server` }));
+    return cb && cb(JSON.stringify({ message: `Successful connection!` }));
 
   });
 
-  //SELECT Querying Data in MySQL Database
+  //SELECT Query
   let sql = "SELECT last_name FROM users";
   db_connection.query(sql, function (err, result, fields) {
 
     if (err || !result.length) {
-      return errorHadle && errorHadle({message:`Querying Error or no results ${err}`}); //return callback('error or no results');
+      return cb && cb({message:`Querying Error or no results ${err}`}); //return callback('error or no results');
     }
 
-    return successfulHadle && successfulHadle(JSON.stringify(result)); //callback
+    return cb && cb(JSON.stringify(result)); //callback
 
   });
+
+  //Inserting into a database
+
+// let sqlQuery = "INSERT INTO users SET ?";
+// db_connection.query(sqlQuery, usersInfo, (err, result) => {
+//     if (err)
+//         console.log(`INSERT error o ${err}`);;
+//     console.log(result);
+//     console.log("an office added...");
+// });
 
   db_connection.end(function (err) {
 
     if (err) {
-      return errorHadle && errorHadle({message:`Error close the database connection:${err.message}`}); //return callback('error or no results');
+      return cb && cb({message:`Error close the database connection:${err.message}`}); //return callback('error or no results');
     }
-    return successfulHadle && successfulHadle({ message: `Close the database connection.`}); //callback
+    return cb && cb(JSON.stringify({ message: `Close the database connection.`}) ); //callback
   });
 
   return db_config;

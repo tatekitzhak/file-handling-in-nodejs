@@ -13,12 +13,12 @@ function readJSONFile(filePath, cb) {
     }
   });
 }
-readJSONFile('./static/output.json', (err, data) => {
-  if (err) {
-    console.log(err);
-    return;
-  }
-  console.log(data); // => "Infinity Loop Drive"
-});
+// readJSONFile('./static/output.json', function(err, data){
+//   if (err) {
+//     console.log(err);
+//     return;
+//   }
+//   console.log(data); // => "Infinity Loop Drive"
+// });
 
 module.exports = {readJSONFile}
