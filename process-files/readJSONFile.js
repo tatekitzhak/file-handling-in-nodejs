@@ -1,5 +1,4 @@
 const fs = require('fs');
-const path = require('path');
 
 function jsonReader(filePath, cb){
 

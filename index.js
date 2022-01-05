@@ -58,7 +58,6 @@ app.get("/mysql_database", function (req, res) {
 });
 
 
-const Cat = require('./mysql-connection/db_test');
 const db_2 = require('./mysql-connection/db_2');
 
 app.get('/db_2', function (req, res) {
@@ -84,24 +83,23 @@ app.get('/json_file_reader', function (req, res) {
       return;
     }
 
-    data.forEach(function (obj, index) {
+    db_2.insertQuery(data, function (ms) {
+      console.log(`Insert Query message: ${ms}`)
+    });
+
+   /*  
+   data.forEach(function (obj, index) {
 
       for (const fileName in obj) {
         console.log(`----------${index}-----------`)
-        /* for (let i = 0; i < obj[fileName].length; i++){
+        for (let i = 0; i < obj[fileName].length; i++){
           const str = obj[fileName][i]; 
           console.log(`Row in file [${fileName}] : ${str}`);
-        } */
-        /* db_2.database_connection(obj, function (ms) {
-          console.log(`Database Connection message: ${ms}`)
-        }); */
-
-        db_2.insertQuery(obj, function (ms) {
-          console.log(`Insert Query  message: ${ms}`)
-        })
+        }
       }
       
-    }); // => "Infinity Loop Drive"
+    }); // => "Infinity Loop Drive" 
+    */
   });
 
   res.send(req.route.path);

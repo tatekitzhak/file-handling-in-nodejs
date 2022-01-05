@@ -6,7 +6,7 @@ const db_config = {
   host: host,
   user: 'ran',
   password: 'ran',
-  database: 'db1',
+  database: 'db_test1',
   debug: false,
 };
 var db;
@@ -51,7 +51,7 @@ function database_connection(data, cb) {
  *  Inserting into a database
  */
 
-function insertQuery(data,cb) {
+function insertQuery(data, cb) {
   db = mysql.createConnection(db_config); //Connecting to MySQL database server
 
   db.connect(function (err) {
@@ -62,24 +62,39 @@ function insertQuery(data,cb) {
 
   });
 
-  let usersInfo = {
-    first_name: "Ran",
-    last_name: "Itzhak",
-    user_type: "Software Engineer",
-    username: "RanItzhak",
-    email: "ran@gmail.com",
-    password: "********"
-  };
-  let sqlQuery = "INSERT INTO users SET ?";
+  data.forEach(function (obj, index) {
 
-  db.query(sqlQuery, usersInfo, (err, result) => {
-    if (err){
-      return cb && cb(`INSERT error: ${err}`);
+    for (const fileName in obj) {
+      let topicInfo = { topic: fileName };
+      let sqlQuery = "INSERT INTO topics SET ?";
+      // Inserting into topics table
+      db.query(sqlQuery, topicInfo, (err, result) => {
+        if (err) {
+          return cb && cb(`INSERT error: ${err}`);
+        }
+
+        return cb && cb("record inserted:", result);
+      });
+
+      // Inserting into subtopics table
+      for (let i = 0; i < obj[fileName].length; i++) {
+        let str = obj[fileName][i];
+        let subtopicInfo = { subtopic: str, topic_id: i };
+        let sqlQuery = "INSERT INTO subtopics SET ?";
+
+        db.query(sqlQuery, subtopicInfo, (err, result) => {
+          if (err) {
+            return cb && cb(`INSERT error: ${err}`);
+          }
+
+          return cb && cb("record inserted:", result);
+        });
+      }
     }
-    
-    return cb && cb("record inserted:",result);
-  });
-  console.log("data:",data)
+
+  }); // => "Infinity Loop Drive"
+
+
   db.end(function (err) {
 
     if (err) {
