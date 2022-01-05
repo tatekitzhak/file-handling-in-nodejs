@@ -36,8 +36,7 @@ function database_connection(successfulHadle, errorHadle) {
     db_connection.query(sqlQuery, usersInfo, (err, result) => {
         if (err)
             console.log(`INSERT error o ${err}`);;
-        console.log(result);
-        console.log("an office added...");
+        console.log("Inserted result:",result);
     });
 
     //SELECT Querying Data in MySQL Database

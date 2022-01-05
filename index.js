@@ -39,9 +39,6 @@ app.get('/', function (req, res) {
 });
 
 
-
-
-
 /*  
   MySQL Database
 */
