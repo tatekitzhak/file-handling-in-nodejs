@@ -92,9 +92,13 @@ app.get('/json_file_reader', function (req, res) {
           const str = obj[fileName][i]; 
           console.log(`Row in file [${fileName}] : ${str}`);
         } */
-        db_2.database_connection(obj, function (ms) {
+        /* db_2.database_connection(obj, function (ms) {
           console.log(`Database Connection message: ${ms}`)
-        });
+        }); */
+
+        db_2.insertQuery(obj, function (ms) {
+          console.log(`Insert Query  message: ${ms}`)
+        })
       }
       
     }); // => "Infinity Loop Drive"

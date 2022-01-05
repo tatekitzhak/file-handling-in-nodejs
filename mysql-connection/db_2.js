@@ -9,13 +9,13 @@ const db_config = {
   database: 'db1',
   debug: false,
 };
-var db_connection;
+var db;
 
 function database_connection(data, cb) {
 
-  db_connection = mysql.createConnection(db_config); //Connecting to MySQL database server
+  db = mysql.createConnection(db_config); //Connecting to MySQL database server
 
-  db_connection.connect(function (err) {
+  db.connect(function (err) {
     if (err) {
       return cb && cb(`The execution line of code function : database_connection() ${err}`);
     }
@@ -25,7 +25,7 @@ function database_connection(data, cb) {
 
   //SELECT Query
   let sql = "SELECT last_name FROM users";
-  db_connection.query(sql, function (err, result, fields) {
+  db.query(sql, function (err, result, fields) {
 
     if (err || !result.length) {
       return cb && cb(JSON.stringify({ message: `Querying Error or no results ${err}` })); //return callback('error or no results');
@@ -35,26 +35,7 @@ function database_connection(data, cb) {
 
   });
 
-  //Inserting into a database
-
-  let usersInfo = {
-    first_name: "Ran",
-    last_name: "Itzhak",
-    user_type: "Software Engineer",
-    username: "RI",
-    email: "ran@gmail.com",
-    password: "********"
-  };
-
-  let sqlQuery = "INSERT INTO users SET ?";
-  db_connection.query(sqlQuery, usersInfo, (err, result) => {
-    if (err)
-      console.log(`INSERT error o ${err}`);;
-    console.log(result);
-    console.log("An usersInfo data added...");
-  });
-
-  db_connection.end(function (err) {
+  db.end(function (err) {
 
     if (err) {
       return cb && cb({ message: `Error close the database connection:${err.message}` }); //return callback('error or no results');
@@ -65,13 +46,51 @@ function database_connection(data, cb) {
   return db_config;
 }
 
+/**
+ * 
+ *  Inserting into a database
+ */
 
-function area(radius) {
-  return { mult: radius * 2 }
-}
+function insertQuery(data,cb) {
+  db = mysql.createConnection(db_config); //Connecting to MySQL database server
+
+  db.connect(function (err) {
+    if (err) {
+      return cb && cb(`The execution line of code function: insertQuery() ${err}`);
+    }
+    return cb && cb(JSON.stringify({ message: `Successful connection!` }));
+
+  });
+
+  let usersInfo = {
+    first_name: "Ran",
+    last_name: "Itzhak",
+    user_type: "Software Engineer",
+    username: "RanItzhak",
+    email: "ran@gmail.com",
+    password: "********"
+  };
+  let sqlQuery = "INSERT INTO users SET ?";
+
+  db.query(sqlQuery, usersInfo, (err, result) => {
+    if (err){
+      return cb && cb(`INSERT error: ${err}`);
+    }
+    
+    return cb && cb("record inserted:",result);
+  });
+  console.log("data:",data)
+  db.end(function (err) {
+
+    if (err) {
+      return cb && cb({ message: `Error close the database connection:${err.message}` }); //return callback('error or no results');
+    }
+    return cb && cb(JSON.stringify({ message: `Close the database connection.` })); //callback
+  });
+};
 
 
 module.exports = {
-  area,
+  insertQuery,
   database_connection
 }
