@@ -2,7 +2,7 @@ const mysql = require('mysql');
 const host = '127.0.0.1';
 
 
-const db_config = {
+var db_config = {
   host: host,
   user: 'ran',
   password: 'ran',
