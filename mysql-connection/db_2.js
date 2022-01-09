@@ -109,7 +109,7 @@ function insertQuery(data, cb) {
  *  SELECT QUERY
  */
 
-function fetchQuery(cb) {
+function fetchQuery(data, cb) {
   db = mysql.createConnection(db_config); //Connecting to database
 
   db.connect(function (err) {
@@ -119,18 +119,30 @@ function fetchQuery(cb) {
     return cb && cb(JSON.stringify({ message: `Successful connection!` }));
 
   });
-
+/* 
   let sql_s_subtopics = "SELECT * FROM subtopics;";
-  
+
   db.query(sql_s_subtopics, function (err, result, fields) {
 
     if (err || !result.length) {
       return cb && cb(`error or no results ${err}`);
     }
     //console.log(`The query result: ${JSON.stringify(result)}`);
-    cb(JSON.stringify({ message: `The query result: ${JSON.stringify(result)}`})); //callback
+    cb(JSON.stringify({ message: `The query result: ${JSON.stringify(result)}` })); //callback
 
   });
+   */
+  queryPromise1 = () => {
+    let sql_s_subtopics = "SELECT * FROM subtopics;";
+    return new Promise((resolve, reject) => {
+      db.query(sql_s_subtopics, (error, results) => {
+        if (error) {
+          return reject(`error or no results ${error}`);
+        }
+        return resolve(results);
+      });
+    });
+  };
 
   db.end(function (err) {
 

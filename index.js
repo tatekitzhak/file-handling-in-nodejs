@@ -104,7 +104,7 @@ app.get('/json_file_reader', function (req, res) {
 
 app.get('/select_table_subtopics', function(req, res) {
 
-    db_2.fetchQuery(function (ms) {
+    db_2.fetchQuery(function (err,ms) {
       console.log(`Database Connection message: ${ms}`)
     });
   
