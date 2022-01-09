@@ -40,7 +40,7 @@ app.get('/', function (req, res) {
 
 
 /*  
-  MySQL Database
+  MySQL db
 */
 app.get("/mysql_database", function (req, res) {
 
@@ -100,6 +100,16 @@ app.get('/json_file_reader', function (req, res) {
   });
 
   res.send(req.route.path);
+});
+
+app.get('/select_table_subtopics', function(req, res) {
+
+    db_2.fetchQuery(function (ms) {
+      console.log(`Database Connection message: ${ms}`)
+    });
+  
+    res.json({1:'1'});
+  
 });
 
 app.listen(port, function (err) {

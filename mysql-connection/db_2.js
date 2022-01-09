@@ -38,9 +38,9 @@ function database_connection(data, cb) {
   db.end(function (err) {
 
     if (err) {
-      return cb && cb({ message: `Error close the database connection:${err.message}` }); //return callback('error or no results');
+      return cb && cb({ message: `Error close the db connection:${err.message}` }); //return callback('error or no results');
     }
-    return cb && cb(JSON.stringify({ message: `Close the database connection.` })); //callback
+    return cb && cb(JSON.stringify({ message: `Close the db connection.` })); //callback
   });
 
   return db_config;
@@ -98,14 +98,52 @@ function insertQuery(data, cb) {
   db.end(function (err) {
 
     if (err) {
-      return cb && cb({ message: `Error close the database connection:${err.message}` }); //return callback('error or no results');
+      return cb && cb({ message: `Error close the db connection:${err.message}` }); //return callback('error or no results');
     }
-    return cb && cb(JSON.stringify({ message: `Close the database connection.` })); //callback
+    return cb && cb(JSON.stringify({ message: `Close the db connection.` })); //callback
   });
 };
 
+/**
+ * 
+ *  SELECT QUERY
+ */
+
+function fetchQuery(cb) {
+  db = mysql.createConnection(db_config); //Connecting to database
+
+  db.connect(function (err) {
+    if (err) {
+      return cb && cb(`not open a connection to MYSQL Server: ${err}`);
+    }
+    return cb && cb(JSON.stringify({ message: `Successful connection!` }));
+
+  });
+
+  let sql_s_subtopics = "SELECT * FROM subtopics;";
+  
+  db.query(sql_s_subtopics, function (err, result, fields) {
+
+    if (err || !result.length) {
+      return cb && cb(`error or no results ${err}`);
+    }
+    //console.log(`The query result: ${JSON.stringify(result)}`);
+    cb(JSON.stringify({ message: `The query result: ${JSON.stringify(result)}`})); //callback
+
+  });
+
+  db.end(function (err) {
+
+    if (err) {
+      return cb && cb({ message: `Error close the db connection: ${err.message}` }); //return callback('error or no results');
+    }
+    return cb && cb(JSON.stringify({ message: `Close the db connection.` })); //callback
+  });
+
+}
 
 module.exports = {
+  database_connection,
   insertQuery,
-  database_connection
-}
+  fetchQuery
+};
