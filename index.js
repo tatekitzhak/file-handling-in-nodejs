@@ -106,7 +106,7 @@ const sq = require('./mysql-connection/select_query');
 
 app.get('/select_table_subtopics', function(req, res) {
  let result = sq.fetchQuery('abc',function (err,ms) {
-      console.log(`DB result: ${JSON.stringify({res:ms})}`)
+      console.log(`DB result: ${JSON.stringify(ms)}`)
     });
 
     res.json({1:'1'});
