@@ -132,7 +132,7 @@ function fetchQuery(data, cb) {
 
   });
    */
-  queryPromise1 = () => {
+  function queryPromise1(){
     let sql_s_subtopics = "SELECT * FROM subtopics;";
     return new Promise((resolve, reject) => {
       db.query(sql_s_subtopics, (error, results) => {
@@ -141,21 +141,27 @@ function fetchQuery(data, cb) {
         }
         return resolve(results);
       });
+
+      db.end();
     });
   };
 
-  db.end(function (err) {
-
-    if (err) {
-      return cb && cb({ message: `Error close the db connection: ${err.message}` }); //return callback('error or no results');
+  async function sequentialQueries () {
+    const promise1= queryPromise1();
+    const promises =[promise1, promise2, promise3];
+    try{
+    const result = await Promise.all(promises);
+    // you can do something with the result
+    } catch(error){
+    console.log(error)
     }
-    return cb && cb(JSON.stringify({ message: `Close the db connection.` })); //callback
-  });
+    }
+  
 
 }
 
-module.exports = {
-  database_connection,
-  insertQuery,
-  fetchQuery
-};
+// module.exports = {
+//   database_connection,
+//   insertQuery,
+//   fetchQuery
+// };

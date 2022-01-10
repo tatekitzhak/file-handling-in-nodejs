@@ -102,12 +102,13 @@ app.get('/json_file_reader', function (req, res) {
   res.send(req.route.path);
 });
 
-app.get('/select_table_subtopics', function(req, res) {
+const sq = require('./mysql-connection/select_query');
 
-    db_2.fetchQuery(function (err,ms) {
-      console.log(`Database Connection message: ${ms}`)
+app.get('/select_table_subtopics', function(req, res) {
+ let result = sq.fetchQuery('abc',function (err,ms) {
+      console.log(`DB result: ${JSON.stringify({res:ms})}`)
     });
-  
+
     res.json({1:'1'});
   
 });
