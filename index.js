@@ -104,7 +104,7 @@ app.get('/json_file_reader', function (req, res) {
 
 const sq = require('./mysql-connection/select_query');
 
-app.get('/select_table_subtopics', function(req, res) {
+app.get('/retrieve_data_from_tables', function(req, res) {
  let result = sq.fetchQuery('abc',function (err,ms) {
       console.log(`DB result: ${JSON.stringify(ms)}`)
     });

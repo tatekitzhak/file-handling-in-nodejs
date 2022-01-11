@@ -82,6 +82,24 @@ async function fetchQuery(data, cb) {
         const result = await Promise.all(promises).then((values) => {
             console.log('Promise1:', values)
             // return cb && cb(null, values);
+            try {
+                
+            } catch (error) {
+                
+            } finally {
+               /*  if (db) {
+                    try {
+                        await db.end((error) => {
+                            if (error) {
+                                console.error('error during disconnection', error.stack)
+                            }
+                            console.log('db has disconnected')
+                        });
+                    } catch (error) {
+                        console.error('Error during db.end() :', error)
+                    }
+                } */
+            }
         });
         // you can do something with the result
         //console.log('Promise:',result)
