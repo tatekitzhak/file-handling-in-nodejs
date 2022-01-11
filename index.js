@@ -106,10 +106,11 @@ const sq = require('./mysql-connection/select_query');
 
 app.get('/retrieve_data_from_tables', function(req, res) {
  let result = sq.fetchQuery('abc',function (err,ms) {
-      console.log(`DB result: ${JSON.stringify(ms)}`)
+      //console.log(`DB result: ${JSON.stringify(ms)}`)
     });
 
-    res.json({1:'1'});
+    res.send({1:123}); // 
+
   
 });
 
