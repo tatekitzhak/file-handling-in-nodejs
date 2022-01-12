@@ -80,7 +80,7 @@ app.get('/json_file_reader', function (req, res) {
       return;
     }
 
-    db_2.insertQuery(data, function (ms) {
+    let recive_data = db_2.insertQuery(data, function (ms) {
       console.log(`Insert Query message: ${ms}`)
     });
 
@@ -105,9 +105,12 @@ app.get('/json_file_reader', function (req, res) {
 const sq = require('./mysql-connection/select_query');
 
 app.get('/retrieve_data_from_tables', function(req, res) {
+
  let result = sq.fetchQuery('abc',function (err,ms) {
-      //console.log(`DB result: ${JSON.stringify(ms)}`)
-    });
+       console.log(`DB result: ${JSON.stringify(ms)}`)
+    })
+
+
 
     res.send({1:123}); // 
 
@@ -116,7 +119,7 @@ app.get('/retrieve_data_from_tables', function(req, res) {
 
 app.listen(port, function (err) {
   if (err) {
-    console.log(`app.listen:${err}`);
+    console.log(`Error :${err}`);
   }
   console.log(`Node Endpoints working at: http://localhost:${port}`)
 });

@@ -22,17 +22,16 @@ function executeSQLStatement(table_name, column, db) {
 
     });
  */
-    let query_subtopics = `SELECT ${column} FROM ${table_name};`;
+    let query_from_table = `SELECT ${column} FROM ${table_name};`;
     return new Promise(async (resolve, reject) => {
 
         try {
-            const result = await db.query(query_subtopics, function (error, results, fields) {
-
+            const result = await db.query(query_from_table, function (error, results, fields) {
+                
                 if (error || !results.length)
                     reject(JSON.stringify({ message: `error or no results: ${error}` }));
                 resolve(results);
             });
-            // console.log('Promise:',results )
 
         } catch (error) {
             reject(`Promise reject: ${error}`);
@@ -84,7 +83,6 @@ async function fetchQuery(data, cb) {
                 console.log('fetchQuery catch:', err)
             }); // Throw async to escape the promise chain
              */
-
         try {
             const topics_table = await executeSQLStatement('topics', 'topic', db);
             const subtopics_table = await executeSQLStatement('subtopics', 'subtopic', db);
@@ -92,14 +90,16 @@ async function fetchQuery(data, cb) {
             console.log('db:', db.config)
 
             const promises = [topics_table, subtopics_table, content_table];
-            const result = await Promise.all(promises).then((values) => {
-                console.log('Promise1:', values)
+             const result =  Promise.all(promises).then((values) => {
+                //console.log('Promise:', values)
                 return cb && cb(null, values);
             });
             // you can do something with the result
+            // console.log('Promise all 1 : ',result)
+            //return result;
 
         } catch (error) {
-            return cb && cb(null, `fetchQuery catch: ${error}`);
+            return cb && cb(null,`fetchQuery catch error: ${error}`);
         } finally {
             if (db) {
                 try {

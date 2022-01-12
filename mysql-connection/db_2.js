@@ -12,8 +12,8 @@ var db_config = {
 var db;
 
 function database_connection(data, cb) {
-
-  db = mysql.createConnection(db_config); //Connecting to MySQL database server
+  //Connecting to MySQL db 
+  db = mysql.createConnection(db_config); 
 
   db.connect(function (err) {
     if (err) {
@@ -52,7 +52,7 @@ function database_connection(data, cb) {
  */
 
 function insertQuery(data, cb) {
-  db = mysql.createConnection(db_config); //Connecting to MySQL database server
+  db = mysql.createConnection(db_config); //Connecting to MySQL db
 
   db.connect(function (err) {
     if (err) {
@@ -119,20 +119,20 @@ function fetchQuery(data, cb) {
     return cb && cb(JSON.stringify({ message: `Successful connection!` }));
 
   });
-/* 
-  let sql_s_subtopics = "SELECT * FROM subtopics;";
-
-  db.query(sql_s_subtopics, function (err, result, fields) {
-
-    if (err || !result.length) {
-      return cb && cb(`error or no results ${err}`);
-    }
-    //console.log(`The query result: ${JSON.stringify(result)}`);
-    cb(JSON.stringify({ message: `The query result: ${JSON.stringify(result)}` })); //callback
-
-  });
-   */
-  function queryPromise1(){
+  /* 
+    let sql_s_subtopics = "SELECT * FROM subtopics;";
+  
+    db.query(sql_s_subtopics, function (err, result, fields) {
+  
+      if (err || !result.length) {
+        return cb && cb(`error or no results ${err}`);
+      }
+      //console.log(`The query result: ${JSON.stringify(result)}`);
+      cb(JSON.stringify({ message: `The query result: ${JSON.stringify(result)}` })); //callback
+  
+    });
+     */
+  function queryPromise1() {
     let sql_s_subtopics = "SELECT * FROM subtopics;";
     return new Promise((resolve, reject) => {
       db.query(sql_s_subtopics, (error, results) => {
@@ -146,18 +146,16 @@ function fetchQuery(data, cb) {
     });
   };
 
-  async function sequentialQueries () {
-    const promise1= queryPromise1();
-    const promises =[promise1, promise2, promise3];
-    try{
-    const result = await Promise.all(promises);
-    // you can do something with the result
-    } catch(error){
-    console.log(error)
+  async function sequentialQueries() {
+    const promise1 = queryPromise1();
+    const promises = [promise1, promise2, promise3];
+    try {
+      const result = await Promise.all(promises);
+      // you can do something with the result
+    } catch (error) {
+      console.log(error)
     }
-    }
-  
-
+  }
 }
 
 // module.exports = {
