@@ -158,8 +158,8 @@ function fetchQuery(data, cb) {
   }
 }
 
-// module.exports = {
-//   database_connection,
-//   insertQuery,
-//   fetchQuery
-// };
+module.exports = {
+  database_connection,
+  insertQuery,
+  fetchQuery
+};

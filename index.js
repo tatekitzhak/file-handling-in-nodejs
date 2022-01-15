@@ -2,8 +2,8 @@ const path = require('path');
 const fs = require('fs');
 const express = require('express');
 const app = express();
-const port = 8000;
 
+const port = process.env.PORT || 9000;
 const jsonFilePath = path.join(__dirname, 'static/output.json');
 
 const readAllFilesDir = require('./process-files/readAllFilesDir');
@@ -109,7 +109,6 @@ app.get('/retrieve_data_from_tables', function(req, res) {
  let result = sq.fetchQuery('abc',function (err,ms) {
        console.log(`DB result: ${JSON.stringify(ms)}`)
     })
-
 
 
     res.send({1:123}); // 
