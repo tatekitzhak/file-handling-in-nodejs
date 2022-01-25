@@ -44,10 +44,18 @@ function readFilesHandle(dirname, onFileContent, occurredError) {
                 resultFileLines.then(function(result_as_an_array ){
                     var specificFileSchemaObject = {};
                     let baseFileName = path.parse(filename).name+'$$';
-                    console.log('File name:', baseFileName);
-                    specificFileSchemaObject[baseFileName] = result_as_an_array;
+                    // match begin of string non alphanumeric characters
+                    let prefix_regex = /^[\s|\W|_]*/g
+                    let res = baseFileName.replace(prefix_regex, '')
+
+                    //match end of string dots and non alphanumeric characters
+                    let suffix_regex = /(\s|\W|_|\.)*(\n|$)/g
+                    res = res.replace(suffix_regex, '')
+
+                    console.log('A file name after remove char with regex: ', res);
+                    specificFileSchemaObject[res] = result_as_an_array;
                     filesContentArrayList.push(specificFileSchemaObject);
-                    console.log('Singel file content:', i,result_as_an_array);  
+                    // console.log('Singel file content:', i,result_as_an_array);  
                 }).catch((err) => {
                     //console.log(`Catch statement error has occurred :${err}`);
                     occurredError(`Catch statement error has occurred :${err}`);

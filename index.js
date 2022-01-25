@@ -19,7 +19,7 @@ app.get('/read_all_files', function (req, res) {
   }
 
   function receiveContent(content) {
-    console.log('Content:', content);
+    //console.log('Content:', content);
     var jsonObj = JSON.stringify(content);
 
     fs.writeFile(jsonFilePath, jsonObj, 'utf8', function (err) {

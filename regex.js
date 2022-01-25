@@ -9,7 +9,7 @@ let patter_end_of_str= /(\s|\W|_|\.)*(\n|$)/g
  */
 
 let str = " -=  '  p?!RegExr hosted by Media Temple?..לדססדג"
-let pattern_begin_of_str = /^[\s\W|_]*/g
+let pattern_begin_of_str = /^[\s|\W|_]*/g
 
-let res = str.replace(/^[\s\W|_]*/g, '')
+let res = str.replace(pattern_begin_of_str, '')
 console.log(res);
