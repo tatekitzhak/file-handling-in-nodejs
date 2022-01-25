@@ -10,7 +10,7 @@ const readAllFilesDir = require('./process-files/readAllFilesDir');
 const database = require('./mysql-connection/connect');
 const db = require('./mysql-connection/db');
 
-app.get('/', function (req, res) {
+app.get('/read_all_files', function (req, res) {
   const dirPath = path.join(__dirname, 'static/test_topics/');
 
   function errorHandling(err) {
@@ -34,7 +34,7 @@ app.get('/', function (req, res) {
 
   readAllFilesDir.readFilesHandle(dirPath, receiveContent, errorHandling);
   console.log('receiveContent():',jsonFilePath)
-  res.send('http://localhost:8000 ...');
+  res.send(`http://localhost:${port} ...`);
 
 });
 
@@ -75,6 +75,7 @@ const jsonReaderHandle = require('./process-files/readJSONFile');
 
 app.get('/json_file_reader', function (req, res) {
   jsonReaderHandle.jsonReader(jsonFilePath, function (err, data) {
+
     if (err) {
       console.log('Error Handling:', err)
       return;

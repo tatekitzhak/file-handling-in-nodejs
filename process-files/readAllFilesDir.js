@@ -43,7 +43,8 @@ function readFilesHandle(dirname, onFileContent, occurredError) {
 
                 resultFileLines.then(function(result_as_an_array ){
                     var specificFileSchemaObject = {};
-                    let baseFileName = path.parse(filename).name;
+                    let baseFileName = path.parse(filename).name+'$$';
+                    console.log('File name:', baseFileName);
                     specificFileSchemaObject[baseFileName] = result_as_an_array;
                     filesContentArrayList.push(specificFileSchemaObject);
                     console.log('Singel file content:', i,result_as_an_array);  
