@@ -55,7 +55,7 @@ function readFilesHandle(dirname, onFileContent, occurredError) {
                     console.log('A file name after remove char with regex: ', res);
                     specificFileSchemaObject[res] = result_as_an_array;
                     filesContentArrayList.push(specificFileSchemaObject);
-                    // console.log('Singel file content:', i,result_as_an_array);  
+                    console.log('Singel file content:', i,result_as_an_array);  
                 }).catch((err) => {
                     //console.log(`Catch statement error has occurred :${err}`);
                     occurredError(`Catch statement error has occurred :${err}`);

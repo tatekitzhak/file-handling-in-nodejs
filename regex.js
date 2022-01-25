@@ -21,3 +21,7 @@ let str = "    ";
 if (!str.replace(/\s/g, '').length) {
   console.log('string only contains whitespace (ie. spaces, tabs or line breaks)');
 }
+/**
+ * match the end of string is question mark or space
+ */
+let reg = /[\s|\?]+$/
