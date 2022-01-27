@@ -52,6 +52,8 @@ function database_connection(data, cb) {
  */
 
 function insertQuery(data, cb) {
+  
+  
   db = mysql.createConnection(db_config); //Connecting to MySQL db
 
   db.connect(function (err) {
@@ -63,11 +65,12 @@ function insertQuery(data, cb) {
   });
 
   data.forEach(function (obj, index) {
-
+    console.log('insertQuery: ',index, obj)
     for (const fileName in obj) {
       let topicInfo = { topic: fileName };
       let sqlQuery = "INSERT INTO topics SET ?";
       // Inserting into topics table
+  
       db.query(sqlQuery, topicInfo, (err, result) => {
         if (err) {
           return cb && cb(`INSERT error: ${err}`);
@@ -79,7 +82,7 @@ function insertQuery(data, cb) {
       // Inserting into subtopics table
       for (let i = 0; i < obj[fileName].length; i++) {
         let str = obj[fileName][i];
-        let subtopicInfo = { subtopic: str, topic_id: i };
+        let subtopicInfo = { subtopic: str, topic_id: index+1 };
         let sqlQuery = "INSERT INTO subtopics SET ?";
 
         db.query(sqlQuery, subtopicInfo, (err, result) => {
@@ -89,6 +92,7 @@ function insertQuery(data, cb) {
 
           return cb && cb("record inserted:", result);
         });
+
       }
     }
 
@@ -102,6 +106,7 @@ function insertQuery(data, cb) {
     }
     return cb && cb(JSON.stringify({ message: `Close the db connection.` })); //callback
   });
+  
 };
 
 /**
