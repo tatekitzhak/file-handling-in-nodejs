@@ -2,6 +2,7 @@ var fs = require('fs');
 const path = require('path');
 const readline = require('readline');
 const readFile = require('./readFileLines');
+const regex_handler = require('../regex');
 
 /* -----------guide-----------
   https://stackoverflow.com/questions/6156501/read-a-file-one-line-at-a-time-in-node-js
@@ -15,11 +16,17 @@ async function readFileLineByLine(filePath){
       });
 
       for await (const line of rl) {
-        
-        tempData.push( line );
+        let res = regex_handler.prefix_regex(line);
+        res = regex_handler.suffix_regex(res);
+        res = regex_handler.str_is_spaces(res);
+       // tempData.push( res );
       
         // Each line in input.txt will be successively available here as `line`.
-        console.log(`Line from file: ${line}`);
+        if(res){
+            console.log(`Line from file: ${res}`);
+            tempData.push( res );
+        }
+           
       }
       return tempData;
       
@@ -44,13 +51,12 @@ function readFilesHandle(dirname, onFileContent, occurredError) {
                 resultFileLines.then(function(result_as_an_array ){
                     var specificFileSchemaObject = {};
                     let baseFileName = path.parse(filename).name+'$$';
+
                     // match begin of string non alphanumeric characters
-                    let prefix_regex = /^[\s|\W|_]*/g
-                    let res = baseFileName.replace(prefix_regex, '')
+                    let res = regex_handler.prefix_regex(baseFileName);
 
                     //match end of string dots and non alphanumeric characters
-                    let suffix_regex = /(\s|\W|_|\.)*(\n|$)/g
-                    res = res.replace(suffix_regex, '')
+                    res = regex_handler.suffix_regex(res);
 
                     console.log('A file name after remove char with regex: ', res);
                     specificFileSchemaObject[res] = result_as_an_array;
@@ -62,7 +68,7 @@ function readFilesHandle(dirname, onFileContent, occurredError) {
                 }).finally(() => {
                     if(i==(filesLength-1)){ 
                         onFileContent(filesContentArrayList)                   
-                        console.log('The final result as an array list of content each file:', filesContentArrayList)
+                        //console.log('The final result as an array list of content each file:', filesContentArrayList)
                     }           
                 });
             }
