@@ -1,22 +1,57 @@
-# Logs
+# npm cache directory
+node_modules
+node_modules/
+**/node_modules/
+.npm
+npm-debug.log
+npm-debug.log*
 
-
-logs
-**/logs
-
-*.log
-**/*.log
+# dotenv environment variables file
+.env
 
 .cache/
 **/.cache/
 
-node_modules/
-**/node_modules/
+# Logs
+logs
+*.log
+**/logs
+**/*.log
 
-.DS_Store
-**/.DS_Store
+# VSCode
+.vscode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+
+# Local History for Visual Studio Code
+.history/
+
+# Built Visual Studio Code Extensions
+*.vsix
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
 
 dist/*
 **/dist/*
 
 static/*
+
+# OS generated files #
+######################
+.DS_Store
+**/.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
