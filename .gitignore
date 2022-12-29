@@ -42,7 +42,7 @@ pids
 dist/*
 **/dist/*
 
-static/*
+static/topics/*
 
 # OS generated files #
 ######################

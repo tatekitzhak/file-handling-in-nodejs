@@ -9,8 +9,6 @@ const port = process.env.PORT || 9000;
 const jsonFilePath = path.join(__dirname, 'static/output.json');
 
 const readAllFilesDir = require('./process-files/readAllFilesDir');
-const database = require('./mysql-connection/connect');
-const db = require('./mysql-connection/db');
 
 app.get('/read_all_files', function (req, res) {
   const dirPath = path.join(__dirname, 'static/test_topics/');
@@ -41,33 +39,6 @@ app.get('/read_all_files', function (req, res) {
 });
 
 
-/*  
-  MySQL db
-*/
-app.get("/mysql_database", function (req, res) {
-
-  database.database_connection(function (successfulData) {
-
-    console.log(`Database Connection: ${successfulData}`)
-  }, function (err) {
-    console.log(`Error Establishing a Database Connection: ${err}`)
-  });
-
-  res.json({ message: "MySQL Database..." });
-});
-
-
-const db_2 = require('./mysql-connection/db_2');
-
-app.get('/db_2', function (req, res) {
-
-  db_2.database_connection(null, function (ms) {
-    console.log(`Database Connection message: ${ms}`)
-  });
-
-  res.json(db_2.database_connection());
-});
-
 /* *************
 * read a JSON file
 * https://heynode.com/tutorial/readwrite-json-files-nodejs/
@@ -82,10 +53,6 @@ app.get('/json_file_reader', function (req, res) {
       console.log('Error Handling:', err)
       return;
     }
-
-    let recive_data = db_2.insertQuery(data, function (ms) {
-      console.log(`Insert Query message: ${ms}`)
-    });
 
    /*  
    data.forEach(function (obj, index) {
@@ -105,17 +72,9 @@ app.get('/json_file_reader', function (req, res) {
   res.send(req.route.path);
 });
 
-const sq = require('./mysql-connection/select_query');
+app.get('/read-file-from-aws-s3', function(req, res) {
 
-app.get('/retrieve_data_from_tables', function(req, res) {
-
- let result = sq.fetchQuery('abc',function (err,ms) {
-       console.log(`DB result: ${JSON.stringify(ms)}`)
-    })
-
-
-    res.send({1:123}); // 
-
+  res.status(200).json({'message':req.route.path})
   
 });
 
