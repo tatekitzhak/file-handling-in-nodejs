@@ -14,7 +14,7 @@ module.exports = function () {
     app.use(mongoose_debug)    
 	app.use(express.json());
 	 */
-    app.use('/aws', function(req, res, next){
+   return app.use('/aws', function(req, res, next){
 		console.log('aws')
 
 		res.status(200).json({mesage: 'aws'})

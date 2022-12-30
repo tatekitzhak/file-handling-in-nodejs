@@ -2,10 +2,12 @@
   "name": "read-file-from-aws-s3",
   "version": "1.0.0",
   "description": "Node JS, Express",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "start": "nodemon index.js",
-    "node": "nodemon index.js"
+    "nodemon": "nodemon server.js",
+    "pm2:start": "pm2 start server.js",
+    "pm2:list": "pm2 list server.js",
+    "pm2:stop": "pm2 stop server.js"
   },
   "repository": {
     "type": "git",
