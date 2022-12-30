@@ -1,36 +1,38 @@
-// Set env variables from .env file
-import { config } from 'dotenv';
-config();
+const http = require("http");
 
 const express = require('express');
 
-import { createServer, Server as HttpServer } from 'http';
+// import { createServer, Server as HttpServer } from 'http';
 
-import { env } from './config/globals';
-import { logger } from './config/logger';
 
-import { Server } from './api/server';
-import { RedisService } from './services/redis';
+const app = require('./api/index')(); // from './api/server';
+
+// import { RedisService } from './services/redis';
 
 // Startup
 (async function main() {
 	try {
-		// Connect db
+		// Connect db:
+		/* 
 		logger.info('Initializing ORM connection...');
-		const connection: Connection = await createConnection();
+		const connection = await createConnection();
+ */
+		// Connect redis:
+		// RedisService.connect();
 
-		// Connect redis
-		RedisService.connect();
-
-		// Init express server
-		const app: express.Application = new Server().app;
-		const server: HttpServer = createServer(app);
+		// Init express server app:
+		// const app = new Server().app;
+		const server = http.createServer(app); // const server: HttpServer = createServer(app);
 
 		// Start express server
-		server.listen(env.NODE_PORT);
+
+		const host = 'localhost';
+		const port = 8000;
+		server.listen(port,host);
 
 		server.on('listening', () => {
-			logger.info(`node server is listening on port ${env.NODE_PORT} in ${env.NODE_ENV} mode`);
+			// logger.info(`node server is listening on port ${env.NODE_PORT} in ${env.NODE_ENV} mode`);
+			console.log(`node server is listening on port ${port}`)
 		});
 
 		server.on('close', () => {
@@ -40,8 +42,8 @@ import { RedisService } from './services/redis';
 		});
 	} catch (err) {
 		logger.error(err.stack);
-    }
-    finally{
-        console.log('finally:\n')
-    }
+	}
+	finally {
+		console.log('finally:\n')
+	}
 })();

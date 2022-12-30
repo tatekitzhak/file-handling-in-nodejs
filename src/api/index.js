@@ -1,20 +1,22 @@
-import express from 'express';
+const express = require("express");
+/* 
+const shopRouter = require('./tiny_store/route');
+const { apiRateNetworkTrafficLimiter } = require('../middlewares/rateLimiter');
+const { mongoose_debug }  = require('../middlewares/enableDebugLoggingMongoose');
+ */
+/**
+ * https://github.com/Automattic/mongoose/issues/4802
+ */
 
-import { initRestRoutes } from './routes';
-
-export class Server {
-	private readonly _app: express.Application = express();
-
-	public constructor() {
-		initRestRoutes(this._app);
-	}
-
-	/**
-	 * Get Express app
-	 *
-	 * @returns {express.Application} Returns Express app
+module.exports = function () {
+	const app = express();
+/* 
+    app.use(mongoose_debug)    
+	app.use(express.json());
 	 */
-	public get app(): express.Application {
-		return this._app;
-	}
-}
+    app.use('/aws', function(req, res, next){
+		console.log('aws')
+
+		res.status(200).json({mesage: 'aws'})
+	});
+};
