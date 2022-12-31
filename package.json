@@ -4,6 +4,7 @@
   "description": "Node JS, Express",
   "main": "server.js",
   "scripts": {
+    "start": "node server.js",
     "nodemon": "nodemon server.js",
     "pm2:start": "pm2 start server.js",
     "pm2:list": "pm2 list server.js",
@@ -18,7 +19,10 @@
   "license": "ISC",
   "homepage": "",
   "dependencies": {
-    "express": "^4.17.1"
+    "body-parser": "^1.20.1",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "helmet": "^6.0.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.14"

@@ -4,8 +4,11 @@ const express = require('express');
 
 // import { createServer, Server as HttpServer } from 'http';
 
+const host = 'localhost';
+const port = 8000;
 
-const app = require('./api/index')(); // from './api/server';
+const { registerMiddlewareServices } = require( './api/middlewares/index' );
+const app = require('./api/index')(registerMiddlewareServices); 
 
 // import { RedisService } from './services/redis';
 
@@ -24,15 +27,12 @@ const app = require('./api/index')(); // from './api/server';
 		const server = http.createServer(app); // const server: HttpServer = createServer(app);
 
 		// Start express server
-
-		const host = 'localhost';
-		const port = 8000;
 		server.listen(port,host);
 
 		server.on('listening', () => {
 			// logger.info(`node server is listening on port ${env.NODE_PORT} in ${env.NODE_ENV} mode`);
 			console.log(`node server is listening on port ${port}`)
-			server.close(9999)
+			// server.close(9999)
 			// process.exit(1234)
 		});
 
