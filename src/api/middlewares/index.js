@@ -5,15 +5,13 @@ const express = require('express'),
 
 const registerMiddlewareServices = express();
 
-
-// import { env } from '../../config/globals';
-
+const { env } = require('../../configs/env');
+console.log(env.NODE_ENV)
 /**
  * Init Express middlewares
  */
-
-
 registerMiddlewareServices.use(helmet()); // For security 
+
 // Allow Origins according to your need.
 const corsOptions = {
     'origin': '*'
@@ -30,18 +28,5 @@ registerMiddlewareServices.use(cors(corsOptions));
 
 registerMiddlewareServices.use(bodyParser.json());
 
-/**
- * Init Express error handler
-/* 
-export function registerErrorHandler(router: Router): Response | void {
-	router.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-		UtilityService.handleError(err);
 
-		return res.status(500).json({
-			error: err.message || err,
-			status: 500
-		});
-	});
-}
- */
 module.exports = { registerMiddlewareServices } ;

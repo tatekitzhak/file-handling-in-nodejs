@@ -1,14 +1,8 @@
 const http = require("http");
-
-const express = require('express');
-
-// import { createServer, Server as HttpServer } from 'http';
-
-const host = 'localhost';
-const port = 8000;
-
+const { env } = require('./configs/env');
 const { registerMiddlewareServices } = require( './api/middlewares/index' );
-const app = require('./api/index')(registerMiddlewareServices); 
+
+require('./api/index')(registerMiddlewareServices, 'Startup'); 
 
 // import { RedisService } from './services/redis';
 
@@ -24,14 +18,17 @@ const app = require('./api/index')(registerMiddlewareServices);
 		// RedisService.connect();
 
 		// Init express server app
-		const server = http.createServer(app); // const server: HttpServer = createServer(app);
+		// const server = http.createServer(expressApp);
 
 		// Start express server
-		server.listen(port,host);
+		registerMiddlewareServices.listen(env.NODE_PORT,env.HOST, () => {
+			console.log(`server started on: \x1b[36m http://localhost:${env.NODE_PORT} \x1b[0m`)
+			// process.exit(1234)
+		});
 
-		server.on('listening', () => {
+		registerMiddlewareServices.on('listening', () => {
 			// logger.info(`node server is listening on port ${env.NODE_PORT} in ${env.NODE_ENV} mode`);
-			console.log(`node server is listening on port ${port}`)
+			console.log(`node server is listening on: http://${env.HOST}:${env.NODE_PORT}`)
 			// server.close(9999)
 			// process.exit(1234)
 		});
@@ -41,7 +38,7 @@ const app = require('./api/index')(registerMiddlewareServices);
 			console.log(`Process exited with code: ${code}`)
 		  })
 		
-		server.on('close', (args) => {
+		  registerMiddlewareServices.on('close', (args) => {
 			// connection.close();
 			// RedisService.disconnect();
 			// logger.info('node server closed');
@@ -53,6 +50,6 @@ const app = require('./api/index')(registerMiddlewareServices);
 		console.log('error:\n',error)
 	}
 	finally {
-		console.log('finally:\n',args)
+		console.log('finally: ',args)
 	}
 })([{},{}]);

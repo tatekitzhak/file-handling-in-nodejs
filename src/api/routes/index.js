@@ -6,46 +6,26 @@ const { HttpError } = require( '../system/helpers/HttpError' );
 const apiRoutes = require( '../system/routes' );
  */
 const myRouter = express.Router();
+myRouter.get('/', (req, res, next) => {
+    res.json({ page: 'Home pag!' })
+  
+  });
 
 myRouter.route('/aws')
+    .get(function (req, res, next) {
+        console.log(req.path,'middleware:')
+        next()
+    },
+        (req, res) => {
+            res.send('Welcome to the /aws');
+        })
+    .post();
+
+myRouter.route('/process-siles')
     .get((req, res) => {
-        res.send('Welcome to the APP');
+        console.log(req.path,':')
+        res.send(`Welcome to the ${req.path}`);
     })
     .post();
 
 module.exports = { myRouter };
-
-module.exports.setRoutes = (app) => {
-
-    /**
-     * Application Root Route.
-     * Set the Welcome message or send a static html or use a view engine.
-     */
-    app.get('/aws', (req, res) => {
-        res.send('Welcome to the APP');
-    });
-
-    /**
-     * API Route.
-     * All the API will start with "/api/[MODULE_ROUTE]"
-     */
-    // app.use( '/api', apiRoutes );
-
-    /**
-     * Serving Static files from uploads directory.
-     * Currently Media module is uploading files into this directory.
-     */
-    // app.use( '/uploads', express.static( path.join( __dirname, '../uploads' ) ) );
-
-    /**
-     * If No route matches. Send user a 404 page
-     */
-    /* 
-        app.use( '/*', ( req, res ) => {
-            const error = new Error( 'Requested path does not exist.' );
-    
-            error.statusCode = 404;
-            res.status( error.statusCode ).json( new HttpError( error ) );
-        } );
-        */
-};
