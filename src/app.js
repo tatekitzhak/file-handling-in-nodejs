@@ -1,8 +1,8 @@
 const http = require("http");
 const { env } = require('./configs/env');
-const { registerMiddlewareServices } = require( './api/middlewares/index' );
+const app = require('./api/middlewares/index');
 
-require('./api/index')(registerMiddlewareServices, 'Startup'); 
+require('./api/index')(app, 'Startup');
 
 // import { RedisService } from './services/redis';
 
@@ -18,38 +18,32 @@ require('./api/index')(registerMiddlewareServices, 'Startup');
 		// RedisService.connect();
 
 		// Init express server app
-		// const server = http.createServer(expressApp);
+		const server = http.createServer(app);
 
 		// Start express server
-		registerMiddlewareServices.listen(env.NODE_PORT,env.HOST, () => {
-			console.log(`server started on: \x1b[36m http://localhost:${env.NODE_PORT} \x1b[0m`)
-			// process.exit(1234)
-		});
-
-		registerMiddlewareServices.on('listening', () => {
+		server.listen(env.NODE_PORT, env.HOST);
+		server.on('listening', () => {
 			// logger.info(`node server is listening on port ${env.NODE_PORT} in ${env.NODE_ENV} mode`);
-			console.log(`node server is listening on: http://${env.HOST}:${env.NODE_PORT}`)
+			console.log(`node server is listening on: \x1b[36m http://${env.HOST}:${env.NODE_PORT}\x1b[0m`)
 			// server.close(9999)
 			// process.exit(1234)
 		});
-
 		process.on('exit', code => {
 			// Only synchronous calls
 			console.log(`Process exited with code: ${code}`)
-		  })
-		
-		  registerMiddlewareServices.on('close', (args) => {
+		})
+		server.on('close', (args) => {
 			// connection.close();
 			// RedisService.disconnect();
 			// logger.info('node server closed');
-			console.log('Node Server closed:',args)
+			console.log('Node Server closed:', args)
 		});
-		
+
 	} catch (error) {
 		// logger.error(err.stack);
-		console.log('error:\n',error)
+		console.log('error:\n', error)
 	}
 	finally {
-		console.log('finally: ',args)
+		console.log('finally: ', args)
 	}
-})([{},{}]);
+})([{}, {}]);

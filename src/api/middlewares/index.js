@@ -1,7 +1,8 @@
 const express = require('express'),
     bodyParser = require('body-parser'),
     cors = require('cors'),
-    helmet = require('helmet');
+	helmet = require('helmet'),
+	logger = require('morgan');
 
 const registerMiddlewareServices = express();
 
@@ -11,6 +12,7 @@ console.log(env.NODE_ENV)
  * Init Express middlewares
  */
 registerMiddlewareServices.use(helmet()); // For security 
+registerMiddlewareServices.use(logger('combined'))
 
 // Allow Origins according to your need.
 const corsOptions = {
@@ -29,4 +31,4 @@ registerMiddlewareServices.use(cors(corsOptions));
 registerMiddlewareServices.use(bodyParser.json());
 
 
-module.exports = { registerMiddlewareServices } ;
+module.exports = registerMiddlewareServices ;
