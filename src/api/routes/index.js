@@ -1,31 +1,34 @@
 'use strict';
 const express = require('express');
+const { readFilesFromAWSS3 } = require('../controllers/aws')
 /* 
 const path = require( 'path' );
 const { HttpError } = require( '../system/helpers/HttpError' );
 const apiRoutes = require( '../system/routes' );
  */
-const myRouter = express.Router();
-myRouter.get('/', (req, res, next) => {
-    res.json({ page: 'Home pag!' })
-  
-  });
 
-myRouter.route('/aws')
+
+// Read and Write to S3 Buckets
+const ProcessFilesRouter = express.Router();
+const ReadWriteToAWSS3BucketsRouter = express.Router();
+
+
+ReadWriteToAWSS3BucketsRouter.route('/')
     .get(function (req, res, next) {
-        console.log(req.path,'middleware:')
+        console.log(`middleware from baseUrl: ${req.baseUrl}`)
         next()
     },
-        (req, res) => {
-            res.send('Welcome to the /aws');
-        })
+        readFilesFromAWSS3)
     .post();
 
-myRouter.route('/process-siles')
+    ProcessFilesRouter.route('/')
     .get((req, res) => {
-        console.log(req.path,':')
+        console.log('baseUrl: ', req.baseUrl)
         res.send(`Welcome to the ${req.path}`);
     })
     .post();
 
-module.exports = { myRouter };
+module.exports = {
+    ProcessFilesRouter,
+    ReadWriteToAWSS3BucketsRouter
+};

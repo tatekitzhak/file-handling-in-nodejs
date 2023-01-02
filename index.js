@@ -2,24 +2,26 @@
 
 const path = require('path');
 const fs = require('fs');
-const express = require('express');
+const express = require('express'),
+    logger = require('morgan');
 const app = express();
 
 const port = process.env.PORT || 9000;
 const jsonFilePath = path.join(__dirname, 'static/output.json');
 
 const readAllFilesDir = require('./process-files/readAllFilesDir');
+app.use(logger('combined'));
 
 app.get('/read_all_files', function (req, res) {
   const dirPath = path.join(__dirname, 'static/test_topics/');
 
   function errorHandling(err) {
-    console.log('Reading directory issues:', err)
+    console.log('Reading directory error:\n', err)
 
   }
 
   function receiveContent(content) {
-    //console.log('Content:', content);
+    // console.log('Content:', content);
     var jsonObj = JSON.stringify(content);
 
     fs.writeFile(jsonFilePath, jsonObj, 'utf8', function (err) {
@@ -28,7 +30,7 @@ app.get('/read_all_files', function (req, res) {
         return console.log(err);
       }
 
-      console.log(`Write a JSON file and has been saved at :${jsonFilePath}`);
+      console.log(`Write a JSON file has been saved at :${jsonFilePath}`);
     });
   }
 

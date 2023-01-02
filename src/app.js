@@ -1,13 +1,17 @@
 const http = require("http");
+var inspect = require('util').inspect;
 const { env } = require('./configs/env');
 const app = require('./api/middlewares/index');
 
 require('./api/index')(app, 'Startup');
 
+const PORT = env.NODE_PORT,
+	HOST = env.HOST;
 // import { RedisService } from './services/redis';
 
 // Startup
 (async function main(args) {
+
 	try {
 		// Connect db:
 		/* 
@@ -21,10 +25,10 @@ require('./api/index')(app, 'Startup');
 		const server = http.createServer(app);
 
 		// Start express server
-		server.listen(env.NODE_PORT, env.HOST);
+		server.listen(PORT, HOST);
 		server.on('listening', () => {
 			// logger.info(`node server is listening on port ${env.NODE_PORT} in ${env.NODE_ENV} mode`);
-			console.log(`node server is listening on: \x1b[36m http://${env.HOST}:${env.NODE_PORT}\x1b[0m`)
+			console.log(`node server is listening on: \x1b[36m http://${env.HOST}:${env.NODE_PORT}\x1b[0m`);
 			// server.close(9999)
 			// process.exit(1234)
 		});

@@ -1,4 +1,5 @@
-const { myRouter } = require('./routes/index');
+const { ProcessFilesRouter, ReadWriteToAWSS3BucketsRouter } = require('./routes/index');
+var inspect = require('util').inspect;
 /* 
 const shopRouter = require('./tiny_store/route');
 const { apiRateNetworkTrafficLimiter } = require('../middlewares/rateLimiter');
@@ -20,7 +21,14 @@ module.exports = function (app, args) {
      * All the API will start with "/api/[MODULE_ROUTE]"
      */
 
-	app.use('/', myRouter);
+	app.get('/', (req, res, next) => {
+		res.json({ page: 'Home pag!' })
+	
+	});
+
+	app.use('/aws', ReadWriteToAWSS3BucketsRouter);
+
+	app.use('/process-files', ProcessFilesRouter);
 
 	 /**
      * If No route matches. Send user a 404 page
