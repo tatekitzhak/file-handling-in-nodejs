@@ -5,6 +5,8 @@ const {
     ListObjectsV2Command,
     PutObjectCommand
 } = require('@aws-sdk/client-s3');
+const fs = require('fs');
+// https://developers.cloudflare.com/r2/examples/aws-sdk-js-v3/
 
 var inspect = require('util').inspect;
 
@@ -16,7 +18,7 @@ var inspect = require('util').inspect;
 const getFilesFromS3Bucket = async (user, content) => {
 
     // Set the AWS Region.
-    const REGION = "Region Name";
+    const REGION = "Region_name";
     // Create an Amazon S3 service client object.
     /* 
         const S3 = new S3Client({
@@ -37,18 +39,16 @@ const getFilesFromS3Bucket = async (user, content) => {
     });
 
     const streamToString = (stream) =>
-        new Promise((resolve, reject) => {
-            const chunks = [];
-            stream.on("data", (chunk) => chunks.push(chunk));
-            stream.on("error", reject);
-            stream.on("end", () => resolve(Buffer.concat(chunks).toString("utf8")));
-        });
-
+         new Promise((resolve, reject) => {
+            stream.pipe(fs.createWriteStream('/directory_name/any_file_name.txt'))
+                .on('error', err => reject(err))
+                .on('close', () => resolve())
+        })
     try {
 
         const command = new GetObjectCommand({
-            Bucket:  "BucketNameHere",
-            Key:  "ObjectNameHere"
+            Bucket: "BucketNameHere", // BucketNameHere
+            Key: "ObjectNameHere", // ObjectNameHere
         });
 
         const { Body } = await s3Client.send(command);
