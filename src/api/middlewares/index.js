@@ -1,13 +1,12 @@
 const express = require('express'),
-    bodyParser = require('body-parser'),
-    cors = require('cors'),
+	bodyParser = require('body-parser'),
+	cors = require('cors'),
 	helmet = require('helmet'),
 	logger = require('morgan');
+const { env } = require('../../configs/env');
 
 const registerMiddlewareServices = express();
 
-const { env } = require('../../configs/env');
-console.log(env.NODE_ENV)
 /**
  * Init Express middlewares
  */
@@ -16,19 +15,34 @@ registerMiddlewareServices.use(logger('combined'))
 
 // Allow Origins according to your need.
 const corsOptions = {
-    'origin': '*'
+	'origin': '*'
 };
-/* 
-	if (env.NODE_ENV === 'development') {
-		router.use(cors({ origin: '*' }));
-	} else {
-		router.use(cors({ origin: ['http://localhost:4200'] }));
+
+if (env.nodeEnv.DEV === 'development') {
+	registerMiddlewareServices.use(cors(corsOptions));
+} else {
+	registerMiddlewareServices.use(cors({ origin: ['http://localhost:4200'] }));
+}
+
+const services = {
+	requireAuthentication: function (req, res, next) {
+		console.log('private requireAuthenticationrequest:');
+		next();
+	},
+	logger: function (req, res, next) {
+		console.log('logger request hit:');
+		next();
 	}
+}
+const parser = {
+	bodyParserUrlencoded: bodyParser.urlencoded({ extended: true }), // to accept POST requests <form> tag which has a body urlencoded 
+	bodyParserJson: bodyParser.json(), // to accept POST requests, send the body in JSON format (Ajax and axios)
+	bodyParserRaw: bodyParser.raw()
+}
 
- */	
-registerMiddlewareServices.use(cors(corsOptions));
 
-registerMiddlewareServices.use(bodyParser.json());
-
-
-module.exports = registerMiddlewareServices ;
+module.exports = {
+	parser,
+	registerMiddlewareServices,
+	services
+};

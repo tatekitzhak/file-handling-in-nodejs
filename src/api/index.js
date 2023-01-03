@@ -1,4 +1,5 @@
 const { ProcessFilesRouter, ReadWriteToAWSS3BucketsRouter } = require('./routes/index');
+const { services } = require('./middlewares/index');
 var inspect = require('util').inspect;
 /* 
 const shopRouter = require('./tiny_store/route');
@@ -28,7 +29,7 @@ module.exports = function (app, args) {
 
 	app.use('/aws', ReadWriteToAWSS3BucketsRouter);
 
-	app.use('/process-files', ProcessFilesRouter);
+	app.use('/process-files', [ services.requireAuthentication, services.logger ], ProcessFilesRouter);
 
 	 /**
      * If No route matches. Send user a 404 page

@@ -1,4 +1,5 @@
-const { getFilesFromS3Bucket } = require('../../services/aws/index')
+const { getFilesFromS3Bucket } = require('../../services/aws/index');
+const { listBucketsName } = require('../../services/aws/listBuckets');
 
 // const { createBlogpost } = blogService
 
@@ -8,7 +9,7 @@ const { getFilesFromS3Bucket } = require('../../services/aws/index')
 const readFilesFromAWSS3 = async (req, res, next) => {
  
   try {
-    const message = await getFilesFromS3Bucket('AWS', 'S3')
+    const message = await listBucketsName()
     // other service call (or same service, different function can go here)
     // i.e. - await generateBlogpostPreview()
     if (message) {

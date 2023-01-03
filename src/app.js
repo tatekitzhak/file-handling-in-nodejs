@@ -1,9 +1,9 @@
 const http = require("http");
 var inspect = require('util').inspect;
 const { env } = require('./configs/env');
-const app = require('./api/middlewares/index');
+const { registerMiddlewareServices } = require('./api/middlewares/index');
 
-require('./api/index')(app, 'Startup');
+require('./api/index')(registerMiddlewareServices, 'Startup');
 
 const PORT = env.NODE_PORT,
 	HOST = env.HOST;
@@ -22,7 +22,7 @@ const PORT = env.NODE_PORT,
 		// RedisService.connect();
 
 		// Init express server app
-		const server = http.createServer(app);
+		const server = http.createServer(registerMiddlewareServices);
 
 		// Start express server
 		server.listen(PORT, HOST);
