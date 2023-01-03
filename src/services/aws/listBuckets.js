@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 const {
     S3Client,
     GetObjectCommand,
@@ -21,10 +22,18 @@ const listBucketsName = async () => {
     });
 
     try {
+
+
         // Get the list Buckets Name from the Amazon S3. It is returned as a .
         const listBucketsName = await s3Client.send(new ListBucketsCommand(''))
             .then((data) => {
-                console.log('listBucketsName:\n', data);
+                console.log('listBucketsName:\n', data.Buckets[0].Name);
+
+                var dir = data.Buckets[0].Name;
+
+                if (!fs.existsSync(path.join(__dirname+'../../../static/') + dir)) {
+                    fs.mkdirSync(path.join(__dirname+'../../../static/') + dir);
+                }
                 return data;
             })
             .catch((error) => {
