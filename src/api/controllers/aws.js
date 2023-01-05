@@ -1,30 +1,40 @@
-const { getFilesFromS3Bucket } = require('../../services/aws/index');
+const { downloadSingleFileFromS3BucketByBucketNameAndObjectName } = require('../../services/aws/index');
 const { listBucketsName } = require('../../services/aws/listBuckets');
 const getObjectsByBucketName = require('../../services/aws/getObjectsByBucketName');
-const { createdNewDirectory, writeDataIntoTile } = require('../../services/create_directories');
+const { createdNewDirectory, writeDataIntoFile } = require('../../services/create_directories');
 
 
 // const { createBlogpost } = blogService
 
 const readFilesFromAWSS3 = async (req, res, next) => {
- 
-  try {
-    const object = await getObjectsByBucketName('convert-text-1', 'convert-text-2');
-   createdNewDirectory(BucketName);
-    const data = await getFilesFromS3Bucket(BucketName, ObjectName);
-    writeDataIntoTile(data.Body, s3BucketName, fileName);
 
-    if (object) {
-        res.status(200).json({ backetName: object['Name'] })
-    } else {
-        res.status(400).json({ object })
+    try {
+        const bucketResources = await getObjectsByBucketName('convert-text-1');
+        const listObjects = {
+            bucketName: bucketResources.Name,
+            files: bucketResources.Contents
+        };
+
+        createdNewDirectory(listObjects.bucketName);
+
+        for (let i = 0; i < listObjects.files.length; i++) {
+            console.log(`listObjects.files[${i}]Key:`, listObjects.files[i].Key)
+            const data = await downloadSingleFileFromS3BucketByBucketNameAndObjectName(listObjects.bucketName, listObjects.files[i].Key);
+            writeDataIntoFile(data.Body, listObjects.bucketName, listObjects.files[i].Key);
+
+        }
+
+        if (bucketResources) {
+            res.status(200).json({ listObjects })
+        } else {
+            res.status(400).json({ bucketResources })
+        }
+
+
+    } catch (error) {
+        console.log("error readFilesFromAWSS3:\n", error.message)
+        next(error)
     }
-    
-    
-  } catch(error) {
-    console.log("e.message:", error.message)
-    next(error)
-  }
 }
 
 module.exports = {

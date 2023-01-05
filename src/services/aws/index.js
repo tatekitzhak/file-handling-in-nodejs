@@ -5,8 +5,8 @@ const { env } = require('../../configs/env');
 const { writeDataIntoTile } = require('./writeDataToFile')
 var inspect = require('util').inspect;
 
-const getFilesFromS3Bucket = async (BucketName, ObjectName) => {
-
+const downloadSingleFileFromS3BucketByBucketNameAndObjectName = async (BucketName, ObjectName) => {
+    
     const s3Client = new S3Client({
         region: env.aws.REGION,
         // endpoint: `https://${ACCOUNT_ID}.r2.cloudflarestorage.com`,
@@ -16,14 +16,13 @@ const getFilesFromS3Bucket = async (BucketName, ObjectName) => {
         }
     });
 
-    // write the data into a file
-    // const downloadFileFromS3Bucket 
+    // // Get a specific File From S3 Bucket By Bucket Name And Object Nam 
     try {
         // Get the object from the Amazon S3 bucket. It is returned as a ReadableStream.
         const data = await s3Client.send(
                 new GetObjectCommand({
-                    Bucket: "convert-text-2", // BucketNameHere
-                    Key: "Archaeology.txt", // ObjectNameHere
+                    Bucket: BucketName, // BucketNameHere
+                    Key: ObjectName, // ObjectNameHere
                 })
             )
             .then( (data) => {
@@ -37,10 +36,11 @@ const getFilesFromS3Bucket = async (BucketName, ObjectName) => {
             .finally(() => {
                 // finally.
             });
-             return data;
+            console.log(data)
+        return data;
 
     } catch (error) {
-        console.log("Error getFilesFromS3Bucket:\n", error);
+        console.log("Error downloadSingleFileFromS3BucketByBucketNameAndObjectName:\n", error);
         throw new Error(error.message)
     }
     finally {
@@ -49,5 +49,5 @@ const getFilesFromS3Bucket = async (BucketName, ObjectName) => {
 }
 
 module.exports = {
-    getFilesFromS3Bucket
+    downloadSingleFileFromS3BucketByBucketNameAndObjectName
 }

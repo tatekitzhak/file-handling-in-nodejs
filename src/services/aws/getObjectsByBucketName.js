@@ -45,7 +45,7 @@ const { env } = require('../../configs/env');
     }
 })();
  */
-module.exports = async (backetName, value2) => {
+module.exports = async (backetName) => {
    
     try {
         const s3Client = new S3Client({
@@ -71,7 +71,6 @@ module.exports = async (backetName, value2) => {
             }
         }
 
-        // console.log('result:', result);
         return object;
     } catch (e) {
         console.log('ListObjectsV2Command:', e);
