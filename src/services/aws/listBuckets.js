@@ -29,10 +29,11 @@ const listBucketsName = async () => {
             .then((data) => {
                 console.log('listBucketsName:\n', data.Buckets[0].Name);
 
-                var dir = data.Buckets[0].Name;
+                let dir = path.join(__dirname + '../../../static/'),
+                    subDir = data.Buckets[0].Name;
 
-                if (!fs.existsSync(path.join(__dirname+'../../../static/') + dir)) {
-                    fs.mkdirSync(path.join(__dirname+'../../../static/') + dir);
+                if (!fs.existsSync(dir + subDir)) {
+                    fs.mkdirSync(dir + subDir);
                 }
                 return data;
             })
