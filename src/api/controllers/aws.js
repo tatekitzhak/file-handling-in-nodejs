@@ -16,7 +16,8 @@ const readFilesFromAWSS3 = async (req, res, next) => {
         };
 
         createdNewDirectory(listObjects.bucketName);
-
+        
+        // Download all files (Objects) from bucket and store them into created folder
         for (let i = 0; i < listObjects.files.length; i++) {
             console.log(`listObjects.files[${i}]Key:`, listObjects.files[i].Key)
             const data = await downloadSingleFileFromS3BucketByBucketNameAndObjectName(listObjects.bucketName, listObjects.files[i].Key);
