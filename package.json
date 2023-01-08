@@ -2,10 +2,10 @@
   "name": "read-file-from-aws-s3",
   "version": "1.0.0",
   "description": "Node JS, Express",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node server.js",
-    "nodemon": "nodemon server.js",
+    "start": "node index.js",
+    "nodemon": "nodemon index.js",
     "pm2:start": "pm2 start server.js",
     "pm2:list": "pm2 list server.js",
     "pm2:stop": "pm2 stop server.js"

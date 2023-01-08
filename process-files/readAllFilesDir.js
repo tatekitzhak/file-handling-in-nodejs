@@ -2,33 +2,39 @@ var fs = require('fs');
 const path = require('path');
 const readline = require('readline');
 const readFile = require('./readFileLines');
-const regex_handler = require('../regex');
+const RegExRemoveUnwantedChar = require('../regex');
 
 /* -----------guide-----------
   https://stackoverflow.com/questions/6156501/read-a-file-one-line-at-a-time-in-node-js
 */
 async function readFileLineByLine(filePath) {
-    const fileStream = fs.createReadStream(filePath);
-    var tempData = [];
-    const rl = readline.createInterface({
-        input: fileStream,
+    const readableFileStream = fs.createReadStream(filePath); // lets us read the contents of a file ( creates a readable stream to a file).
+
+    var singleTextFileIntoArray = [];
+    const readable = readline.createInterface({
+        input: readableFileStream,
         crlfDelay: Infinity
     });
 
-    for await (const line of rl) {
-        let res = regex_handler.prefix_regex(line);
-        res = regex_handler.suffix_regex(res);
-        res = regex_handler.str_is_spaces(res);
-        // tempData.push( res );
+    for await (const line of readable) {
+        try {
+            console.log(`Line from file: ${line}`);
+            let fileLine = RegExRemoveUnwantedChar.prefix_regex(line);
+            fileLine = RegExRemoveUnwantedChar.suffix_regex(fileLine);
+            fileLine = RegExRemoveUnwantedChar.str_is_spaces(fileLine);
+            // Each line in input.txt will be successively available here as `line`.
+            if (fileLine) {
+                // console.log(`Line from file: ${res}`);
+                singleTextFileIntoArray.push(fileLine);
+            }
 
-        // Each line in input.txt will be successively available here as `line`.
-        if (res) {
-            console.log(`Line from file: ${res}`);
-            tempData.push(res);
+        } catch (error) {
+            console.log('error:', error);
         }
 
     }
-    return tempData;
+    console.log('singleTextFileIntoArray:', singleTextFileIntoArray)
+    return singleTextFileIntoArray;
 
 }
 
@@ -36,43 +42,77 @@ async function readFileLineByLine(filePath) {
     https://stackoverflow.com/questions/10049557/reading-all-files-in-a-directory-store-them-in-objects-and-send-the-object
 */
 function readFilesHandle(dirname, onFileContent, occurredError) {
-    let filesContentArrayList = [];
+
     fs.readdir(dirname, function (err, filenames) {
+        let contentTopicsCompleted = [];
         if (err) {
             occurredError(`The directory name is invalid: ${err}`);
             return;
         }
-        let resultFileLines;
-        let filesLength = filenames.length;
-        filenames.forEach(function (filename, i) {
-            if (path.extname(filename) == ".txt") {
-                resultFileLines = readFileLineByLine(dirname + filename);
 
-                resultFileLines.then(function (result_as_an_array) {
-                    var specificFileSchemaObject = {};
+        var filelist = ['woohoo.txt', 'aha.pdf', 'wahoo.txt'];
+        var extension = '.txt';
+
+        var validateFileExtension = filenames.filter(function (file) {
+            return file.indexOf(extension) !== -1;
+        });
+
+        console.log(validateFileExtension); // expected output: ['woohoo.txt', 'wahoo.txt']
+
+        let filesLength = validateFileExtension.length;
+        console.log('files Array:', validateFileExtension)
+        console.log('files Length:', filesLength);
+        var data = '';
+
+        validateFileExtension.forEach(function (filename, i) {
+            console.log('forEach files :', filename, i)
+            console.log('forEach dirname + filename :', dirname + filename)
+            data = readFileLineByLine(dirname + filename)
+                .then(function (result_as_an_array) {
+                    console.log('forEach result_as_an_array:', result_as_an_array)
+                    let specificFileSchemaObject = {};
+                    specificFileSchemaObject.subcategories = result_as_an_array;
                     let baseFileName = path.parse(filename).name + '$$';
-
                     // match begin of string non alphanumeric characters
-                    let res = regex_handler.prefix_regex(baseFileName);
+
+                    baseFileName = RegExRemoveUnwantedChar.prefix_regex(baseFileName);
 
                     //match end of string dots and non alphanumeric characters
-                    res = regex_handler.suffix_regex(res);
+                    baseFileName = RegExRemoveUnwantedChar.suffix_regex(baseFileName);
 
-                    console.log('A file name after remove char with regex: ', res);
-                    specificFileSchemaObject[res] = result_as_an_array;
-                    filesContentArrayList.push(specificFileSchemaObject);
-                    console.log('Singel file content:', i, result_as_an_array);
+                    // console.log('A file name after remove char with regex: ', baseFileName);
+                    console.log('forEach baseFileName:', baseFileName)
+                    specificFileSchemaObject.name = baseFileName;
+                    contentTopicsCompleted.push(specificFileSchemaObject);
+
+                    // console.log('Singel file content:', i, result_as_an_array);
+                    return contentTopicsCompleted;
                 }).catch((err) => {
                     //console.log(`Catch statement error has occurred :${err}`);
                     occurredError(`Catch statement error has occurred :${err}`);
                 }).finally(() => {
+                    /* console.log('finally filesLength:', filesLength, i, contentTopicsCompleted.length)
                     if (i == (filesLength - 1)) {
-                        onFileContent(filesContentArrayList)
-                        //console.log('The final result as an array list of content each file:', filesContentArrayList)
+                        onFileContent(contentTopicsCompleted)
+                        //console.log('The final result as an array list of content each file:', contentTopicsCompleted)
+                    } */
+
+                    /**
+                     if (i == (filesLength - 1) && contentTopicsCompleted.length == (filesLength - 1)) {
+                        onFileContent(contentTopicsCompleted)
+                    } else {
+                        onFileContent('Check file content and length'+contentTopicsCompleted)
                     }
+                     */
                 });
-            }
-        });
+
+            data.then(function (result) {
+                if (result.length == filesLength) {
+                    console.log('result:', result, result.length) // "Some User token"
+                    onFileContent(result)
+                }
+            });
+        }); // End forEach
     });
 }
 

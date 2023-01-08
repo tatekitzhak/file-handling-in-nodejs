@@ -1,3 +1,4 @@
+'use strict'; // eslint-disable-line strict
 const http = require("http");
 var inspect = require('util').inspect;
 const { env } = require('./configs/env');

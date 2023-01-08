@@ -1,4 +1,4 @@
-'use strict';
+'use strict'; // eslint-disable-line strict
 const express = require('express');
 const { readFilesFromAWSS3 } = require('../controllers/aws')
 /* 
@@ -21,10 +21,10 @@ ReadWriteToAWSS3BucketsRouter.route('/')
         readFilesFromAWSS3)
     .post();
 
-    ProcessFilesRouter.route('/')
+ProcessFilesRouter.route('/')
     .get((req, res) => {
         console.log('baseUrl: ', req.baseUrl)
-        res.send(`Welcome to the ${req.path}`);
+        res.send(`Welcome to the ${req.baseUrl}`);
     })
     .post();
 
