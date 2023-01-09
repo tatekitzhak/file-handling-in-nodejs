@@ -1,6 +1,7 @@
 'use strict'; // eslint-disable-line strict
 const express = require('express');
-const { readFilesFromAWSS3 } = require('../controllers/aws')
+const { readFilesFromAWSS3 } = require('../controllers/aws');
+const { readWriteFiles } = require('../controllers/readWriteFiles');
 /* 
 const path = require( 'path' );
 const { HttpError } = require( '../system/helpers/HttpError' );
@@ -9,7 +10,7 @@ const apiRoutes = require( '../system/routes' );
 
 
 // Read and Write to S3 Buckets
-const ProcessFilesRouter = express.Router();
+const ReadWriteFilesRouter = express.Router();
 const ReadWriteToAWSS3BucketsRouter = express.Router();
 
 
@@ -18,17 +19,18 @@ ReadWriteToAWSS3BucketsRouter.route('/')
         console.log(`middleware from baseUrl: ${req.baseUrl}`)
         next()
     },
-        readFilesFromAWSS3)
-    .post();
+        readFilesFromAWSS3
+    ).post();
 
-ProcessFilesRouter.route('/')
-    .get((req, res) => {
+ReadWriteFilesRouter.route('/')
+    .get((req, res, next) => {
         console.log('baseUrl: ', req.baseUrl)
-        res.send(`Welcome to the ${req.baseUrl}`);
-    })
-    .post();
+        next()
+    },
+        readWriteFiles
+    ).post();
 
 module.exports = {
-    ProcessFilesRouter,
+    ReadWriteFilesRouter,
     ReadWriteToAWSS3BucketsRouter
 };

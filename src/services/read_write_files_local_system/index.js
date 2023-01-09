@@ -1,8 +1,7 @@
 var fs = require('fs');
 const path = require('path');
 const readline = require('readline');
-const readFile = require('./readFileLines');
-const RegExRemoveUnwantedChar = require('../regex');
+const RegExRemoveUnwantedChar = require('./regex');
 
 /* -----------guide-----------
   https://stackoverflow.com/questions/6156501/read-a-file-one-line-at-a-time-in-node-js
@@ -59,7 +58,7 @@ function readingWritingFilesHandle(dirname, onFileContent, occurredError) {
                 .then(function (arrayOfTextsFromFile) {
 
                     let specificFileSchemaObject = {};
-                   
+
                     let baseFileName = path.parse(filename).name;
                     // match begin of string non alphanumeric characters
 
@@ -79,12 +78,11 @@ function readingWritingFilesHandle(dirname, onFileContent, occurredError) {
                 }).catch((err) => {
                     occurredError(`Catch statement error has occurred :${err}`);
                 }).finally(() => {
-                   
+
                 });
         }); // End forEach
     });
 }
-
 
 
 module.exports = { readingWritingFilesHandle }

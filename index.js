@@ -4,15 +4,16 @@ const path = require('path'),
   fs = require('fs'),
   express = require('express');
 const app = express();
+const { readingWritingFilesHandle } = require('./process-files/readAllFilesDir');
 
 const port = process.env.PORT || 9000;
 
 var readableResources = path.join(__dirname, 'static/test_topics/'),
   newWritableJSONFile = path.join(__dirname, 'static/output.json');
 
-const readAllFilesDir = require('./process-files/readAllFilesDir');
 
-app.get('/read_all_files', function (req, res, next) {
+
+app.get('/reading-writing-files', function (req, res, next) {
 
   function errorHandling(err) {
     console.log('Reading directory error:\n', err)
@@ -20,8 +21,6 @@ app.get('/read_all_files', function (req, res, next) {
   }
 
   function getContentOfArrayAndWriteFile(content) {
-    // console.log('Content:', content);
-    // newObject = JSON.stringify(content);
 
     fs.writeFile(newWritableJSONFile, JSON.stringify(content), 'utf8', function (err) {
       if (err) {
@@ -35,7 +34,7 @@ app.get('/read_all_files', function (req, res, next) {
     res.status(200).json(content);
   }
 
-  readAllFilesDir.readFilesHandle(readableResources, getContentOfArrayAndWriteFile, errorHandling);
+  readingWritingFilesHandle(readableResources, getContentOfArrayAndWriteFile, errorHandling);
 
 });
 
@@ -48,7 +47,7 @@ app.get('/read_all_files', function (req, res, next) {
 const jsonReaderHandle = require('./process-files/readJSONFile');
 
 app.get('/json_file_reader', function (req, res) {
-  jsonReaderHandle.jsonReader(jsonFilePath, function (err, data) {
+  jsonReaderHandle.jsonReader(newWritableJSONFile, function (err, data) {
 
     if (err) {
       console.log('Error Handling:', err)
@@ -71,12 +70,6 @@ app.get('/json_file_reader', function (req, res) {
   });
 
   res.send(req.route.path);
-});
-
-app.get('/read-file-from-aws-s3', function (req, res) {
-
-  res.status(200).json({ 'message': req.route.path })
-
 });
 
 app.listen(port, function (err) {

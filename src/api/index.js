@@ -1,4 +1,4 @@
-const { ProcessFilesRouter, ReadWriteToAWSS3BucketsRouter } = require('./routes/index');
+const { ReadWriteFilesRouter, ReadWriteToAWSS3BucketsRouter } = require('./routes/index');
 const { services } = require('./middlewares/index');
 var inspect = require('util').inspect;
 /* 
@@ -29,7 +29,7 @@ module.exports = function (app, args) {
 
 	app.use('/aws', ReadWriteToAWSS3BucketsRouter);
 
-	app.use('/process-files', [ services.requireAuthentication, services.logger ], ProcessFilesRouter);
+	app.use('/process-files', [ services.requireAuthentication, services.logger ], ReadWriteFilesRouter);
 
 	 /**
      * If No route matches. Send user a 404 page
