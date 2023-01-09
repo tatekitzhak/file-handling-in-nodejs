@@ -17,7 +17,6 @@ const listBucketsName = async () => {
 
     try {
 
-
         // Get the list Buckets Name from the Amazon S3. It is returned as a .
         const listBucketsName = await s3Client.send(new ListBucketsCommand(''))
             .then((data) => {
@@ -33,6 +32,7 @@ const listBucketsName = async () => {
             })
             .catch((error) => {
                 console.log('error listBucketsName:\n', error);
+                throw new Error(error.message)
             })
             .finally((a) => {
                 console.log('finally listBucketsName:\n', a);

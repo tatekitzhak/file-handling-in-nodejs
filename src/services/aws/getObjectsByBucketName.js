@@ -29,7 +29,8 @@ module.exports = async (backetName) => {
         }
 
         return object;
-    } catch (e) {
-        console.log('ListObjectsV2Command:', e);
+    } catch (error) {
+        console.log('ListObjectsV2Command:', error);
+        throw new Error(error.message)
     }
 }

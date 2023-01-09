@@ -1,7 +1,7 @@
 var fs = require('fs');
 const path = require('path');
 const readline = require('readline');
-const RegExRemoveUnwantedChar = require('./regex');
+const RegExRemoveUnwantedChar = require('../../utils/regex');
 
 /* -----------guide-----------
   https://stackoverflow.com/questions/6156501/read-a-file-one-line-at-a-time-in-node-js
@@ -36,13 +36,13 @@ async function readFileLineByLine(filePath) {
 /* -----------guide-----------
     https://stackoverflow.com/questions/10049557/reading-all-files-in-a-directory-store-them-in-objects-and-send-the-object
 */
-function readingWritingFilesHandle(dirname, onFileContent, occurredError) {
+function readingContentsOfDirectory(dirname, onFileContent) {
 
-    fs.readdir(dirname, function (err, filenames) {
+    fs.readdir(dirname, function (error, filenames) {
         let contentTopicsCompleted = [];
-        if (err) {
-            occurredError(`The directory name is invalid: ${err}`);
-            return;
+        if (error) {
+            console.log('The directory name is invalid:\n', error);
+            throw new Error(error.message)
         }
 
         var extension = '.txt';
@@ -75,14 +75,19 @@ function readingWritingFilesHandle(dirname, onFileContent, occurredError) {
                         onFileContent(contentTopicsCompleted)
                     }
                     return contentTopicsCompleted;
-                }).catch((err) => {
-                    occurredError(`Catch statement error has occurred :${err}`);
-                }).finally(() => {
+                }).catch((error) => {
+                    console.log('Catch statement error has occurred:\n', error);
+                    throw new Error(error.message);
 
                 });
         }); // End forEach
+/* 
+        data.then(function(result) {
+            console.log('result:',result) // "Some User token"
+         })
+          */
     });
 }
 
 
-module.exports = { readingWritingFilesHandle }
+module.exports = { readingContentsOfDirectory }
