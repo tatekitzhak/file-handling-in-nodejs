@@ -1,8 +1,6 @@
-const fs = require('fs');
-const { S3Client, GetObjectCommand, ListBucketsCommand, ListObjectsV2Command, PutObjectCommand } = require('@aws-sdk/client-s3');
+const { S3Client, GetObjectCommand } = require('@aws-sdk/client-s3');
 // https://developers.cloudflare.com/r2/examples/aws-sdk-js-v3/
 const { env } = require('../../configs/env');
-const { writeDataIntoTile } = require('./writeDataToFile')
 var inspect = require('util').inspect;
 
 const downloadSingleFileFromS3BucketByBucketNameAndObjectName = async (BucketName, ObjectName) => {
