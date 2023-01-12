@@ -28,7 +28,16 @@ const topicSchema = mongoose.Schema({
     subscribers: {
         type: Number
     },
-    tags: [Schema.Types.Mixed],
+    tags: {
+        type: [Schema.Types.Mixed],
+        lowercase: true,
+        validate: {
+          validator: function (value) {
+            return value.length > 0
+          },
+          message: `A ${this.name} should have at least one tag.`,
+        },
+      },
     isPublished: Boolean,
     subcategorie: {
         type: ObjectId,

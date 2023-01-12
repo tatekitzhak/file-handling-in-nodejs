@@ -30,7 +30,7 @@ const PORT = env.NODE_PORT,
 		server.listen(PORT, HOST);
 		server.on('listening', () => {
 			new Database('app.js')
-			console.log(`node server is listening on: \x1b[36m http://${env.HOST}:${env.NODE_PORT}\x1b[0m`);
+			console.log(`Node server is listening on: \x1b[36m http://${env.HOST}:${env.NODE_PORT}\x1b[0m`);
 			// logger.info(`node server is listening on port ${env.NODE_PORT} in ${env.NODE_ENV} mode`);
 			// server.close(9999)
 			// process.exit(1234)
@@ -51,6 +51,6 @@ const PORT = env.NODE_PORT,
 		console.log('error:\n', error)
 	}
 	finally {
-		console.log('finally: ', args)
+		console.log('app.js finally: ', args)
 	}
 })([{}, {}]);

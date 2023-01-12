@@ -1,6 +1,11 @@
 #!/usr/bin/env node
 
 /**
+ * https://vegibit.com/express-js-beginner-tutorial/
+ * https://github.com/expressjs/generator/issues/25
+ */
+
+/**
  * Module dependencies.
  */
 

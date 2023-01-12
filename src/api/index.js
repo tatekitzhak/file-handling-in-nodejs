@@ -1,4 +1,4 @@
-const { ReadWriteFilesRouter, ReadWriteToAWSS3BucketsRouter } = require('./routes/index');
+const { ReadWriteFilesRouter, ReadWriteToAWSS3BucketsRouter, Router } = require('./routes/index');
 const { services } = require('./middlewares/index');
 /* 
 const shopRouter = require('./tiny_store/route');
@@ -25,15 +25,16 @@ module.exports = function (app, args) {
 		res.json({ page: 'Home pag!' })
 	
 	});
-
+	app.use('/api', Router);
+	/* 
 	app.use('/aws', ReadWriteToAWSS3BucketsRouter);
 
 	app.use('/process-files', [ services.requireAuthentication, services.logger ], ReadWriteFilesRouter);
-
+ */
 	 /**
      * If No route matches. Send user a 404 page
      */
-	app.use('/*', (req, res, next) => {
+	app.use('/api/*', (req, res, next) => {
 		console.log('Error handler:\n',);
 		const err = new Error(404, 'fail', 'undefined route\n');
 		next(err, req, res, next);
