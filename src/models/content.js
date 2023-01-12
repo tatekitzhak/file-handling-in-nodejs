@@ -5,6 +5,8 @@ const contentSchema = mongoose.Schema({
     name: {
         type: String,
         required: '{PATH} is required!',
+        minlength: 5,
+        maxlength: 255,
         unique: true
     },
     tags: {
@@ -19,6 +21,8 @@ const contentSchema = mongoose.Schema({
     isPublished: Boolean,
     content: {
         type: String,
+        minlength: 0,
+        maxlength: 9999,
     },
 }, {
     timestamps: true

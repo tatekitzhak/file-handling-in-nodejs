@@ -9,7 +9,15 @@ const articleSchema = mongoose.Schema({
         maxlength: 255,
         unique: true
     },
-    tags: [String, String],
+    tags: {
+        type: Array,
+        validate: {
+            validator: function (value) {
+                return value.length > 0;
+            },
+            message: "A content should have at least one tag.",
+        }
+    },
     isPublished: Boolean,
     topic: {
         type: ObjectId, ref: 'Topic',
@@ -17,7 +25,9 @@ const articleSchema = mongoose.Schema({
         unique: true
     },
     content: {
-        type: String
+        type: String,
+        minlength: 0,
+        maxlength: 9999,
     },
     abstract: {
         type: String

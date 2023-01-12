@@ -12,3 +12,9 @@ const blogpostDb = (user, content) => {
   module.exports = {
     blogpostDb
   }
+
+  module.exports = {
+      Product: require('./tiny_store/product'),
+      Owner: require('./tiny_store/owner'),
+      Shop: require('./tiny_store/shop'),
+    }

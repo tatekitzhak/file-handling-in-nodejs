@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
+var Schema = mongoose.Schema;
 
-const ObjectId = mongoose.Schema.Types.ObjectId;
+const ObjectId = Schema.Types.ObjectId;
 
-const categorieSchema = mongoose.Schema({
+const categorieSchema = new Schema({
   name: {
     type: String,
     required: '{PATH} is required!',
@@ -10,7 +11,7 @@ const categorieSchema = mongoose.Schema({
     maxlength: 255,
     unique: true
   },
-  tags: [String, String],
+  tags: [Schema.Types.Mixed],
   isPublished: Boolean,
   subcategories: [{
     type: ObjectId,

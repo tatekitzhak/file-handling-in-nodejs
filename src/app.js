@@ -1,6 +1,7 @@
 'use strict'; // eslint-disable-line strict
 const http = require("http");
-var inspect = require('util').inspect;
+const { mongooseConnection } = require('./configs/connection');
+const Database = require( './configs/database' );
 const { env } = require('./configs/env');
 const { registerMiddlewareServices } = require('./api/middlewares/index');
 
@@ -28,8 +29,9 @@ const PORT = env.NODE_PORT,
 		// Start express server
 		server.listen(PORT, HOST);
 		server.on('listening', () => {
-			// logger.info(`node server is listening on port ${env.NODE_PORT} in ${env.NODE_ENV} mode`);
+			new Database('app.js')
 			console.log(`node server is listening on: \x1b[36m http://${env.HOST}:${env.NODE_PORT}\x1b[0m`);
+			// logger.info(`node server is listening on port ${env.NODE_PORT} in ${env.NODE_ENV} mode`);
 			// server.close(9999)
 			// process.exit(1234)
 		});

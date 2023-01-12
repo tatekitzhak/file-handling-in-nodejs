@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
-const ObjectId = mongoose.Schema.Types.ObjectId;
+var Schema = mongoose.Schema;
+const ObjectId = Schema.Types.ObjectId;
 
-const subCategorieSchema = mongoose.Schema({
+const subCategorieSchema = new Schema({
   name: {
     type: String,
     minlength: 5,
@@ -11,7 +12,7 @@ const subCategorieSchema = mongoose.Schema({
     },
     unique: true
   },
-  tags: [String, String],
+  tags: [String],
   isPublished: Boolean,
   categories: [{
     type: ObjectId,

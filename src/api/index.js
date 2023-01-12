@@ -1,6 +1,5 @@
 const { ReadWriteFilesRouter, ReadWriteToAWSS3BucketsRouter } = require('./routes/index');
 const { services } = require('./middlewares/index');
-var inspect = require('util').inspect;
 /* 
 const shopRouter = require('./tiny_store/route');
 const { apiRateNetworkTrafficLimiter } = require('../middlewares/rateLimiter');

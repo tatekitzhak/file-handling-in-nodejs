@@ -5,8 +5,8 @@ const topicSchema = mongoose.Schema({
     name: {
         type: String,
         required: '{PATH} is required!',
-        minlength: 5,
-        maxlength: 255,
+        minlength: 0,
+        maxlength: 9999,
         unique: true
     },
     author: {
@@ -16,7 +16,7 @@ const topicSchema = mongoose.Schema({
         type: String
     },
     video: {
-        link: {
+        url: {
             type: String,
             trim: true,
         }
@@ -28,7 +28,7 @@ const topicSchema = mongoose.Schema({
     subscribers: {
         type: Number
     },
-    tags: [String, String],
+    tags: [Schema.Types.Mixed],
     isPublished: Boolean,
     subcategorie: {
         type: ObjectId,
