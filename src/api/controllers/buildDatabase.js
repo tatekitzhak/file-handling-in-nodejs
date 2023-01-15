@@ -1,5 +1,5 @@
 'use strict'; // eslint-disable-line strict
-const CreateData = require('../../services/models/createData');
+const CreateData = require('../../services/database/createData');
 
 const buildDatabase = (req, res, next) => {
     const name = new CreateData('arguments');

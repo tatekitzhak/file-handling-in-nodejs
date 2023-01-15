@@ -4,35 +4,42 @@ const { Categorie } = require('../../models/index');
 
 // All Business logic will be here
 class CreateData {
-    constructor() {
-        console.log('constructor CreateCategories')
+    constructor(size, data, categorie) {
+        this.data = data;
+        this.categories_size = size;
+        this.categorieModel = categorie
+        this.createCategories(this.data, this.categorieModel)
     }
 
-    createCategories(data) {
-        console.log('CreateCategories:', data)
+    async createCategories(data, CategorieModel) {
         try {
+            const categoriesSize = data.length;
+            const categories = data;
+            for (let i = 0; i < categoriesSize; i++) {
+                // console.log(`categories:${i}`,categories)
 
-            return 'createCategories';
-        } catch (err) {
-            throw new Error('Data Not found')
+                CategorieModel.create({ name: categories[i].name, tags: categories[i].name.split(" ") })
+                    .then(function (result) {
+                        console.log(`result:${i}`, result)
+                        return result;
+                    })
+                    .catch(function (error) {
+                        console.log('catch 1 error:\n',error)
+                        throw new Error(error)
+                    })
+            }
+
+        } catch (error) {
+            // console.log('catch 2 error:\n',error)
+            throw new Error(error)
         }
 
     }
 
-    async GetCategories() {
+     getCategories() {
         try {
-            const products = await this.repository.Products();
 
-            let categories = {};
-
-            products.map(({ type }) => {
-                categories[type] = type;
-            });
-
-            return FormateData({
-                products,
-                categories: Object.keys(categories),
-            })
+            return this.data;
 
         } catch (err) {
             throw new APIError('Data Not found')

@@ -5,8 +5,8 @@ const path = require('path'),
 
 const { readingContentsOfDirectory } = require('./readContentsOfDirectory');
 
-const READABLE_RESOURCES = path.join(__dirname, '../../static/convert-text-1/'),
-  NEW_WRITABLE_JSON_FILE = path.join(__dirname, '../../static/convert-text-1.json');
+const READABLE_RESOURCES = path.join(__dirname, '../../static/test_topics/'),
+  NEW_WRITABLE_JSON_FILE = path.join(__dirname, '../../static/test_topics.json');
 
 const readWriteFilesLocalDirectory = (cb) => {
 

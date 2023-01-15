@@ -12,7 +12,10 @@ const subCategorieSchema = new Schema({
     },
     unique: true
   },
-  tags: [String],
+  tags: {
+    type: [Schema.Types.Mixed],
+    lowercase: true,
+  },
   isPublished: Boolean,
   categories: [{
     type: ObjectId,

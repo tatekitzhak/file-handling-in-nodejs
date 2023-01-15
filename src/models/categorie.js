@@ -9,9 +9,13 @@ const categorieSchema = new Schema({
     required: '{PATH} is required!',
     minlength: 5,
     maxlength: 255,
-    unique: true
+    unique: true,
+    uppercase: true
   },
-  tags: [Schema.Types.Mixed],
+  tags: {
+    type: [Schema.Types.Mixed],
+    lowercase: true,
+  },
   isPublished: Boolean,
   subcategories: [{
     type: ObjectId,

@@ -9,59 +9,25 @@ const apiRoutes = require( '../system/routes' );
  */
 
 
-/* 
-const ReadWriteFilesRouter = express.Router();
-const ReadWriteToAWSS3BucketsRouter = express.Router();
-
-
-ReadWriteToAWSS3BucketsRouter.route('/')
-    .get(function (req, res, next) {
-        console.log(`middleware from baseUrl: ${req.baseUrl}`)
-        next()
-    },
-        readFilesFromAWSS3
-    ).post();
-
-ReadWriteFilesRouter.route('/')
-    .get((req, res, next) => {
-        console.log('baseUrl: ', req.baseUrl)
-        next()
-    },
-        readWriteFiles
-    ).post();
-
-module.exports = {
-    ReadWriteFilesRouter,
-    ReadWriteToAWSS3BucketsRouter
-};
- */
-
-// Read and Write to S3 Buckets
 const Router = express.Router();
-const ReadWriteToAWSS3BucketsRouter = express.Router();
 
+function middleware(req, res, next) {
+    console.log(`middleware from baseUrl: ${req.url}`);
+        next();
+}
 
 Router.route('/aws')
-    .get(function (req, res, next) {
-        console.log(`middleware from baseUrl: ${req.url}`)
-        next()
-    },
+    .get(middleware,
         readFilesFromAWSS3
     ).post();
 
 Router.route('/build-database')
-    .get(function (req, res, next) {
-        console.log(`middleware from baseUrl: ${req.url}`)
-        next()
-    },
+    .get(middleware,
     buildDatabase
     ).post();
 
 Router.route('/process-files')
-    .get((req, res, next) => {
-        console.log('baseUrl: ', req.url)
-        next()
-    },
+    .get(middleware,
         readWriteFiles
     ).post();
 
