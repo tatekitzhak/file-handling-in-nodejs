@@ -1,5 +1,4 @@
-// const { ProductRepository } = require("../database");
-const { Categorie } = require('../../models/index');
+
 
 
 // All Business logic will be here
@@ -16,7 +15,7 @@ class CreateData {
             const categoriesSize = data.length;
             const categories = data;
             for (let i = 0; i < categoriesSize; i++) {
-                // console.log(`categories:${i}`,categories)
+                console.log(`categories:${i}`,CategorieModel)
 
                 CategorieModel.create({ name: categories[i].name, tags: categories[i].name.split(" ") })
                     .then(function (result) {
@@ -30,7 +29,7 @@ class CreateData {
             }
 
         } catch (error) {
-            // console.log('catch 2 error:\n',error)
+            console.log('catch 2 error:\n',error)
             throw new Error(error)
         }
 

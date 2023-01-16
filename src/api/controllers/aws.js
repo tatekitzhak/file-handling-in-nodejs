@@ -4,8 +4,6 @@ const getObjectsByBucketName = require('../../services/aws/getObjectsByBucketNam
 const { createdNewDirectory, writeDataIntoFile } = require('../../services/create_directories');
 
 
-// const { createBlogpost } = blogService
-
 const readFilesFromAWSS3 = async (req, res, next) => {
 
     try {

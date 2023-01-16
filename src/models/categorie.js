@@ -23,7 +23,8 @@ const categorieSchema = new Schema({
     unique: true
   }]
 }, {
-  timestamps: true
+  timestamps: true,
+  versionKey: false
 });
 
 module.exports = mongoose.model('Categorie', categorieSchema);
