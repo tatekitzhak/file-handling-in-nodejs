@@ -28,7 +28,10 @@ const subCategorieSchema = new Schema({
     ref: 'Topic'
   }]
 }, {
-  timestamps: true
+  timestamps: true,
+  // versionKey: false
 });
+
+subCategorieSchema.set('versionKey', false);
 
 module.exports = mongoose.model('Subcategorie', subCategorieSchema);

@@ -6,7 +6,7 @@ const ObjectId = Schema.Types.ObjectId;
 const categorieSchema = new Schema({
   name: {
     type: String,
-    required: '{PATH} is required!',
+    // required: '{PATH} is required!',
     minlength: 5,
     maxlength: 255,
     unique: true,

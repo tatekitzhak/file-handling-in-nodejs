@@ -1,52 +1,53 @@
 
-
-
 // All Business logic will be here
 class CreateData {
-    constructor(size, data, categorie) {
-        this.data = data;
-        this.categories_size = size;
-        this.categorieModel = categorie
-        this.createCategories(this.data, this.categorieModel)
+    constructor(categories, categorieModel, subcategorieModel) {
+        this.categories = categories;
+        this.categorieModel = categorieModel
+        this.subcategorieModel = subcategorieModel
+        this.createCategories();
+        // this.getCategories()
     }
 
-    async createCategories(data, CategorieModel) {
-        try {
-            const categoriesSize = data.length;
-            const categories = data;
-            for (let i = 0; i < categoriesSize; i++) {
-                console.log(`categories:${i}`,CategorieModel)
+    createCategories() {
 
-                CategorieModel.create({ name: categories[i].name, tags: categories[i].name.split(" ") })
-                    .then(function (result) {
-                        console.log(`result:${i}`, result)
-                        return result;
+        try {
+
+           this.categories.forEach((categorie, i) => {
+                console.log('categorie-1:', i, categorie)
+                const res = this.categorieModel.create({ name: categorie.name, tags: categorie.subcategories })
+                    .then(function (categorie) {
+                        console.log('categorie-2:', i, categorie)
+                        return categorie;
                     })
                     .catch(function (error) {
-                        console.log('catch 1 error:\n',error)
+                        console.log('catch 1 error:\n', error)
                         throw new Error(error)
-                    })
-            }
+                    });
 
+            });
+     
         } catch (error) {
-            console.log('catch 2 error:\n',error)
+            console.log('catch 2 error:\n', error)
             throw new Error(error)
         }
 
     }
 
-     getCategories() {
+    async getCategories() {
         try {
-
-            return this.data;
+            const categories = await this.categorieModel.find()
+            console.log('getCategories:', categories)
+            console.log('this.categories:', this.categories)
+            return categories;
 
         } catch (err) {
-            throw new APIError('Data Not found')
+            throw new Error('Data Not found')
         }
     }
 
-
-    async GetProductDescription(productId) {
+    async createSubcategorie(subcategories, SubcategorieModel) {
+        
         try {
             const product = await this.repository.FindById(productId);
             return FormateData(product)

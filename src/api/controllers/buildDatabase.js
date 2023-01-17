@@ -1,13 +1,14 @@
 'use strict'; // eslint-disable-line strict
+const CreateData = require('../../services/db/createData');
 
-// const { CategorieModel, SubcategorieModel } = require('../../models/index');
+const { CategorieModel, SubcategorieModel } = require('../../models/index');
 
 const buildDatabase = (categories) => {
 
-    // const categoriesInc = new CreateData(categories.length, categories, CategorieModel);
-    
+    const categoriesInc = new CreateData(categories, CategorieModel, SubcategorieModel);
 
-    console.log('categories: ', categories)
+    // console.log('categoriesInc: ', categoriesInc.getCategories())
+
 };
 
 module.exports = { buildDatabase };
