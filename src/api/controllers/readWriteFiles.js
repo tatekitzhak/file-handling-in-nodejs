@@ -38,7 +38,7 @@ const readWriteFiles = (req, res, next) => {
         
 
         await createCategories(topics)
-        // await getCategories()
+        await getCategories()
 
         if (content.length) {
             res.status(200).json(content);

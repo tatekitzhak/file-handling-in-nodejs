@@ -8,69 +8,52 @@ module.exports = {
         try {
             let owner = {};
             /* 
-                        categories.forEach(async (categorie, i) => {
+                        for (let i = 0; i < categories.length; i++) {
                             // console.log('categorie, i: ', i, categorie)
-                            console.log(' \x1b[36m owner: \x1b[0m ',i, owner, categorie)
-                            //  Owner.create({ name: categorie.name });
-                             owner = new Owner({
-                                name: categorie.name
-                            })
-                             await owner.save()
-                                .then(res => {
-                                    console.log('res:', res)
-                                });
-                                
-                                return owner;
-                        }); */
+            
+                            await Owner.create({ name: categories[i].name })
+                                .then(owner => {
+                                    console.log(' \x1b[36m owner: \x1b[0m ', owner)
+                                })
+                                .catch(err => console.log('Error on bundle: Owner.create: ' + err));;
+            
+                            
+                                            // owner = new Owner({
+                                            //     name: categories[i].name
+                                            // })
+                                            // await owner.save()
+                                            //     .then(res => {
+                                            //         console.log(' \x1b[36m res: \x1b[0m ', res._id)
+                                            //     });
+                                            // console.log(' \x1b[36m owner: \x1b[0m ', i, owner)
+                                            
+                        }
+                        return owner;
+             */
 
             for (let i = 0; i < categories.length; i++) {
-                // console.log('categorie, i: ', i, categorie)
 
                 await Owner.create({ name: categories[i].name })
-                    .then(owner => {
-                        console.log(' \x1b[36m owner: \x1b[0m ', owner)
-                    })
-                    .catch(err => console.log('Error on bundle: Owner.create: ' + err));;
+                    .then(async function (owner) {
 
-                /* 
-                                owner = new Owner({
-                                    name: categories[i].name
+                        for (let s = 0; s < categories[i].subcategories.length; s++) {
+                            console.log('subcategories.length: ', categories[i].subcategories.length, categories[i].subcategories[s], i, s)
+                            await Shop.create({ owner: owner._id, name: categories[i].subcategories[s] })
+                                .then(async function (shop) {
+
+                                    await Owner.findByIdAndUpdate(owner._id, {
+                                        $push: { shops: shop._id }
+                                    }, { 'new': true });
+
                                 })
-                                await owner.save()
-                                    .then(res => {
-                                        console.log(' \x1b[36m res: \x1b[0m ', res._id)
-                                    });
-                                console.log(' \x1b[36m owner: \x1b[0m ', i, owner)
-                                 */
-            }
+                                .catch(err => console.log('Error on bundle: Shop.create: ' + err));
 
-            return owner;
-
-            /* 
-                        for (let i = 0; i < categories.length; i++) {
-                            console.log('categories.length: ', categories.length, categories[i].name, i)
-            
-                             Owner.create({ name: categories[i].name })
-                                .then(async function (owner) {
-            
-                                    for (let s = 0; s < categories[i].subcategories.length; s++) {
-                                        console.log('subcategories.length: ', categories[i].subcategories.length, categories[i].subcategories[s],i, s)
-                                         Shop.create({ owner: owner._id, name: categories[i].subcategories[s] })
-                                            .then(async function (shop) {
-            
-                                                 Owner.findByIdAndUpdate(owner._id, {
-                                                    $push: { shops: shop._id }
-                                                }, { 'new': true });
-            
-                                            })
-                                            .catch(err => console.log('Error on bundle: Shop.create: ' + err));
-            
-                                    };
-                                })
-                                .catch(err => console.log('Error on bundle: Owner.create: ' + err));
-            
                         };
-             */
+                    })
+                    .catch(err => console.log('Error on bundle: Owner.create: ' + err));
+
+            };
+
 
         } catch (error) {
             console.log('error:\n', error);
