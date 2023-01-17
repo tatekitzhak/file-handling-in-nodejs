@@ -1,16 +1,44 @@
 'use strict'; // eslint-disable-line strict
 
-const { buildDatabase } = require('./buildDatabase');
+// const { buildDatabase } = require('./buildDatabase');
+const { createCategories, getCategories } = require('../../services/db/createData');
 
 const { readWriteFilesLocalDirectory } = require('../../services/read_write_files_local_directory');
 
 const readWriteFiles = (req, res, next) => {
+    const topics = [
+        {
+            "name": "ran 1",
+            "subcategories": [
+                        "111111111",
+                        "222222222",
+                        "333333333",
+            ]
+        },
+        {
+            "name": "ran 2",
+            "subcategories": [
+                        "aaaaaa",
+                        "bbbbbb",
+                        "cccccc"
+            ]
+        },
+        {
+            "name": "ran 3",
+            "subcategories": [
+                "AAAAAAAAAAA",
+                "BBBBBBBBBBB",
+                "CCCCCCCCCCC",
+            ]
+        }
+    ];
     
 
     async function getContent(content) {
         
 
-        buildDatabase(content)
+        await createCategories(topics)
+        // await getCategories()
 
         if (content.length) {
             res.status(200).json(content);

@@ -29,7 +29,7 @@ const PORT = env.NODE_PORT,
 		// Start express server
 		server.listen(PORT, HOST);
 		server.on('listening', () => {
-			new Database('app.js')
+			mongooseConnection('app.js')
 			console.log(`Node server is listening on: \x1b[36m http://${env.HOST}:${env.NODE_PORT}\x1b[0m`);
 			// logger.info(`node server is listening on port ${env.NODE_PORT} in ${env.NODE_ENV} mode`);
 			// server.close(9999)

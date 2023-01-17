@@ -1,5 +1,5 @@
 'use strict'; // eslint-disable-line strict
-const { createCategories } = require('../../services/db/createData');
+const { createCategories, getCategories } = require('../../services/db/createData');
 
 
 const buildDatabase = (categories) => {
@@ -32,6 +32,7 @@ const buildDatabase = (categories) => {
     ];
 
     createCategories(topics)
+    getCategories()
 
 };
 
