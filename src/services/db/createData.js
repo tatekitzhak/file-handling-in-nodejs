@@ -1,38 +1,81 @@
+const ObjectId = require('mongoose').Types.ObjectId;
+const { Product, Owner, Shop } = require('../../models/index')
 
 // All Business logic will be here
-class CreateData {
-    constructor(categories, categorieModel, subcategorieModel) {
-        this.categories = categories;
-        this.categorieModel = categorieModel
-        this.subcategorieModel = subcategorieModel
-        this.createCategories();
-        // this.getCategories()
-    }
-
-    createCategories() {
+module.exports = {
+    async createCategories(categories) {
 
         try {
+            /* 
+                        categories.forEach((categorie, i) => {
+                            console.log('categorie, i: ',i, categorie)
+                            
+                             Owner.create({ name: categorie.name })
+                                .then(async function (owner) {
+                                    console.log('owner: ', owner)
+                                    console.log('categorie.subcategories: ', categorie)
+                                    categorie.subcategories.forEach((subcategorie, x) => {
+                                        console.log('subcategorie, i: ', subcategorie, x, i)
+            
+                                         const shop_id = Shop.create({ owner: owner._id, name: subcategorie })
+                                            .then(async function (shop) {
+                                                return shop._id
+            
+                                                return await Owner.findByIdAndUpdate(owner._id, {
+                                                    $push: { shops: shop._id }
+                                                }, { 'new': true });
+            
+            
+                                            })
+                                            .catch(err => console.log('\x1b[31m Error on bundle: Shop.create: \x1b[0m  ' + err));
+                                           
+                                    });
+                                    
+                                })
+                                .catch(err => console.log('\x1b[31m Error on bundle: Owner.create: \x1b[0m ' + err));
+            
+                        });
+                         */
 
-           this.categories.forEach((categorie, i) => {
-                console.log('categorie-1:', i, categorie)
-                const res = this.categorieModel.create({ name: categorie.name, tags: categorie.subcategories })
-                    .then(function (categorie) {
-                        console.log('categorie-2:', i, categorie)
-                        return categorie;
+            for (let i = 0; i < categories.length; i++) {
+                console.log('categories.length: ', categories.length, categories[i].name, i)
+
+                 Owner.create({ name: categories[i].name })
+                    .then(async function (owner) {
+
+                        for (let s = 0; s < categories[i].subcategories.length; s++) {
+                            console.log('subcategories.length: ', categories[i].subcategories.length, categories[i].subcategories[s],i, s)
+                             Shop.create({ owner: owner._id, name: categories[i].subcategories[s] })
+                                .then(async function (shop) {
+
+                                     Owner.findByIdAndUpdate(owner._id, {
+                                        $push: { shops: shop._id }
+                                    }, { 'new': true });
+
+                                })
+                                .catch(err => console.log('Error on bundle: Shop.create: ' + err));
+
+                        };
                     })
-                    .catch(function (error) {
-                        console.log('catch 1 error:\n', error)
-                        throw new Error(error)
-                    });
+                    .catch(err => console.log('Error on bundle: Owner.create: ' + err));
 
-            });
-     
+            };
+
+
         } catch (error) {
-            console.log('catch 2 error:\n', error)
-            throw new Error(error)
+            console.log('error:\n', error);
+
+        }
+        finally {
+            //finallyCode - Code block to be executed regardless of the try result
+            /**
+             * Do some clean up
+             * Do log
+             */
+            console.log('Finally will execute every time');
         }
 
-    }
+    },
 
     async getCategories() {
         try {
@@ -45,44 +88,4 @@ class CreateData {
             throw new Error('Data Not found')
         }
     }
-
-    async createSubcategorie(subcategories, SubcategorieModel) {
-        
-        try {
-            const product = await this.repository.FindById(productId);
-            return FormateData(product)
-        } catch (err) {
-            throw new APIError('Data Not found')
-        }
-    }
-
-    async GetProductsByCategory(category) {
-        try {
-            const products = await this.repository.FindByCategory(category);
-            return FormateData(products)
-        } catch (err) {
-            throw new APIError('Data Not found')
-        }
-
-    }
-
-    async GetSelectedProducts(selectedIds) {
-        try {
-            const products = await this.repository.FindSelectedProducts(selectedIds);
-            return FormateData(products);
-        } catch (err) {
-            throw new APIError('Data Not found')
-        }
-    }
-
-    async GetCategoriestById(productId) {
-        try {
-            return await this.repository.FindById(productId);
-        } catch (err) {
-            throw new APIError('Data Not found')
-        }
-    }
-
 }
-
-module.exports = CreateData;

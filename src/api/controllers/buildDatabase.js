@@ -1,11 +1,37 @@
 'use strict'; // eslint-disable-line strict
-const CreateData = require('../../services/db/createData');
+const { createCategories } = require('../../services/db/createData');
 
-const { CategorieModel, SubcategorieModel } = require('../../models/index');
 
 const buildDatabase = (categories) => {
 
-    const categoriesInc = new CreateData(categories, CategorieModel, SubcategorieModel);
+    const topics = [
+        {
+            "name": "ran 1",
+            "subcategories": [
+                        "111111111",
+                        "222222222",
+                        "333333333",
+            ]
+        },
+        {
+            "name": "ran 2",
+            "subcategories": [
+                        "aaaaaa",
+                        "bbbbbb",
+                        "cccccc"
+            ]
+        },
+        {
+            "name": "ran 3",
+            "subcategories": [
+                "AAAAAAAAAAA",
+                "BBBBBBBBBBB",
+                "CCCCCCCCCCC",
+            ]
+        }
+    ];
+
+    createCategories(topics)
 
 };
 
