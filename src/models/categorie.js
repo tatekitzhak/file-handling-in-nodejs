@@ -7,7 +7,7 @@ const categorieSchema = new Schema({
   name: {
     type: String,
     // required: '{PATH} is required!',
-    minlength: 5,
+    minlength: 3,
     maxlength: 255,
     unique: true,
     uppercase: true

@@ -35,13 +35,15 @@ const readWriteFiles = (req, res, next) => {
     
 
     async function getContent(content) {
-        
-
-        await createCategories(topics)
-        await getCategories()
+        if (!content.length) {
+            console.log('Missing categories data')
+            throw new Error('Missing categories data');
+        }
+        await createCategories(content)
+        // await getCategories()
 
         if (content.length) {
-            res.status(200).json(content);
+            res.status(200).json(await getCategories());
         } else {
             res.status(400).json('Empty');
         }

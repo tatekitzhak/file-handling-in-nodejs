@@ -5,7 +5,7 @@ const ObjectId = Schema.Types.ObjectId;
 const subCategorieSchema = new Schema({
   name: {
     type: String,
-    minlength: 5,
+    minlength: 3,
     maxlength: 255,
     required: function () {
       return this.categories.require

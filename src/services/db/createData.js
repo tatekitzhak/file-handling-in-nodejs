@@ -1,81 +1,75 @@
 const ObjectId = require('mongoose').Types.ObjectId;
-const { Product, Owner, Shop } = require('../../models/index')
+const { CategorieModel, SubcategorieModel, Owner, Shop } = require('../../models/index')
 
 // All Business logic will be here
 module.exports = {
     async createCategories(categories) {
 
-        try {
-            let owner = {};
-            /* 
-                        for (let i = 0; i < categories.length; i++) {
-                            // console.log('categorie, i: ', i, categorie)
-            
-                            await Owner.create({ name: categories[i].name })
-                                .then(owner => {
-                                    console.log(' \x1b[36m owner: \x1b[0m ', owner)
-                                })
-                                .catch(err => console.log('Error on bundle: Owner.create: ' + err));;
-            
-                            
-                                            // owner = new Owner({
-                                            //     name: categories[i].name
-                                            // })
-                                            // await owner.save()
-                                            //     .then(res => {
-                                            //         console.log(' \x1b[36m res: \x1b[0m ', res._id)
-                                            //     });
-                                            // console.log(' \x1b[36m owner: \x1b[0m ', i, owner)
-                                            
-                        }
-                        return owner;
-             */
 
-            for (let i = 0; i < categories.length; i++) {
+        const categoriesIfExist = await CategorieModel.find();
+        if (categoriesIfExist.length) {
+            throw new Error('Collection documents already exists!');
+        } else {
 
-                await Owner.create({ name: categories[i].name })
-                    .then(async function (owner) {
-
-                        for (let s = 0; s < categories[i].subcategories.length; s++) {
-                            console.log('subcategories.length: ', categories[i].subcategories.length, categories[i].subcategories[s], i, s)
-                            await Shop.create({ owner: owner._id, name: categories[i].subcategories[s] })
-                                .then(async function (shop) {
-
-                                    await Owner.findByIdAndUpdate(owner._id, {
-                                        $push: { shops: shop._id }
-                                    }, { 'new': true });
-
-                                })
-                                .catch(err => console.log('Error on bundle: Shop.create: ' + err));
-
-                        };
-                    })
-                    .catch(err => console.log('Error on bundle: Owner.create: ' + err));
-
-            };
+            try {
 
 
-        } catch (error) {
-            console.log('error:\n', error);
+                for (let i = 0; i < categories.length; i++) {
 
-        }
-        finally {
-            //finallyCode - Code block to be executed regardless of the try result
-            /**
-             * Do some clean up
-             * Do log
-             */
-            console.log('Finally will execute every time');
+                    await CategorieModel.create({ name: categories[i].name })
+                        .then(async function (categorie) {
+                            for (let s = 0; s < categories[i].subcategories.length; s++) {
 
+                                await SubcategorieModel.create({ categories: categorie._id, name: categories[i].subcategories[s] })
+                                    .then(async function (subcategorie) {
+                                        await CategorieModel.findByIdAndUpdate(categorie._id, {
+                                            $push: { subcategories: subcategorie._id }
+                                        }, { 'new': true });
+
+                                    })
+                                    .catch(function (error) {
+                                        console.log('\x1b[36m Error on bundle: SubcategorieModel.create: \x1b[0m:', error)
+                                        new Error("Could not create a new SubcategorieModel");
+                                    });
+
+                            }
+                        })
+                        .catch(function (error) {
+                            console.log('\x1b[36m Error on bundle: CategorieModel.create: \x1b[0m:', error)
+                            new Error("Could not create a new CategorieModel");
+                        });
+                }
+
+            } catch (error) {
+                console.log('error:\n', error);
+                new Error("Could not create a new schema model");
+            }
+            finally {
+                //finallyCode - Code block to be executed regardless of the try result
+                /**
+                 * Do some clean up
+                 * Do log
+                 */
+                console.log('Finally will execute every time');
+
+            }
         }
 
     },
 
     async getCategories() {
         try {
-            const owner = await Owner.find().populate();
-            console.log('getCategories:', owner)
-            return owner;
+            const categorie = await CategorieModel.find()
+                .populate({
+                    path: 'subcategories',
+                    /*  populate: {
+                         path: 'owner',
+                         select: 'name',
+                     },
+                     options: { lean: true } */
+                });
+            console.log('getCategories:', categorie)
+            return categorie;
 
         } catch (err) {
             throw new Error('Data Not found')
