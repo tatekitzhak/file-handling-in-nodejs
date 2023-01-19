@@ -1,7 +1,8 @@
 'use strict'; // eslint-disable-line strict
-const http = require("http");
+const http = require("http"),
+	dotenv = require('dotenv').config();
 const { mongooseConnection } = require('./configs/connection');
-const Database = require( './configs/database' );
+const Database = require('./configs/database');
 const { env } = require('./configs/env');
 const { registerMiddlewareServices } = require('./api/middlewares/index');
 

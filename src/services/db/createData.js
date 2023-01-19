@@ -13,13 +13,12 @@ module.exports = {
 
             try {
 
-
                 for (let i = 0; i < categories.length; i++) {
-
+                    console.log('categories:\n', categories.length);
                     await CategorieModel.create({ name: categories[i].name })
                         .then(async function (categorie) {
                             for (let s = 0; s < categories[i].subcategories.length; s++) {
-
+                                console.log('subcategories:\n', categories[i].subcategories.length);
                                 await SubcategorieModel.create({ categories: categorie._id, name: categories[i].subcategories[s] })
                                     .then(async function (subcategorie) {
                                         await CategorieModel.findByIdAndUpdate(categorie._id, {
@@ -52,6 +51,11 @@ module.exports = {
                  */
                 console.log('Finally will execute every time');
 
+               /*  let categorie = await CategorieModel.find(); 
+                let subcategorie = await SubcategorieModel.find();
+                console.log('categorie:', categorie.length);
+                console.log('subcategorie:', subcategorie.length); */
+
             }
         }
 
@@ -63,7 +67,7 @@ module.exports = {
                 .populate({
                     path: 'subcategories',
                     /*  populate: {
-                         path: 'owner',
+                         path: 'topics',
                          select: 'name',
                      },
                      options: { lean: true } */

@@ -39,11 +39,11 @@ const readWriteFiles = (req, res, next) => {
             console.log('Missing categories data')
             throw new Error('Missing categories data');
         }
-        await createCategories(content)
+        await createCategories(topics)
         // await getCategories()
 
         if (content.length) {
-            res.status(200).json(await getCategories());
+            res.status(200).json(content);
         } else {
             res.status(400).json('Empty');
         }
