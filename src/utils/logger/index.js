@@ -2,8 +2,6 @@ const buildDevLogger = require('./dev-logger'),
     buildProdLogger = require('./prod-logger'),
     buildStageLogger = require('./stage-logger');
 
-const logger = null;
-
 module.exports = {
     
     logger: function (params) {

@@ -4,6 +4,15 @@ const { CategorieModel, SubcategorieModel, Owner, Shop } = require('../../models
 // All Business logic will be here
 module.exports = {
     async createCategories(categories) {
+        /**
+         * https://stackoverflow.com/questions/10266512/how-can-i-save-multiple-documents-concurrently-in-mongoose-node-js
+         * https://forum.freecodecamp.org/t/pushing-mongoose-documents-to-another-document-as-array-elements/400067/3
+         * https://alexanderzeitler.com/articles/mongoose-referencing-schema-in-properties-and-arrays/
+         * https://stackoverflow.com/questions/24359650/getting-nested-array-references-using-mongoose-schema
+         * https://stackoverflow.com/questions/27260162/how-to-save-multiple-refs-to-other-documents-in-mongodb-using-mongoose
+         * https://mongoosejs.com/docs/2.7.x/docs/populate.html
+         * https://masteringjs.io/tutorials/mongoose/array
+         */
 
 
         const categoriesIfExist = await CategorieModel.find();
