@@ -8,7 +8,7 @@
     "nodemon": "nodemon index.js",
     "logger-dev": "PORT=8080 NODE_ENV=development nodemon logger.js",
     "logger-stage": "NODE_ENV=stage PORT=8001 nodemon logger.js",
-    "logger-prod": "PORT=8080 NODE_ENV=production nodemon logger.js",
+    "logger-prod": "PORT=8080 NODE_ENV=production node logger.js",
     "pm2:start": "pm2 start index.js",
     "pm2:list": "pm2 list index.js",
     "pm2:stop": "pm2 stop index.js"
