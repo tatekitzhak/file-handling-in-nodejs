@@ -1,6 +1,6 @@
 require('dotenv').config({ path: `.env` });
-const { env } = require('./src/configs/env');
-const { logger } = require('./src/utils/logger/index');
+const { env } = require('/home/ec2-user/file-handling-in-nodejs/src/configs/env');
+const { logger } = require('/home/ec2-user/file-handling-in-nodejs/src/utils/logger/index');
 
 logger().info(process.env.NODE_ENV);
 logger().warn('warn text');
