@@ -3,6 +3,7 @@ const express = require('express'),
 	cors = require('cors'),
 	helmet = require('helmet'),
 	logger = require('morgan');
+	
 const { env } = require('../../configs/env');
 
 const registerMiddlewareServices = express();
@@ -18,10 +19,10 @@ const corsOptions = {
 	'origin': '*'
 };
 
-if (env.nodeEnv.DEV === 'development') {
+if (env.NODE_ENV === 'development') {
 	registerMiddlewareServices.use(cors(corsOptions));
 } else {
-	registerMiddlewareServices.use(cors({ origin: ['http://localhost:4200'] }));
+	registerMiddlewareServices.use(cors({ origin: [`http://localhost:${env.NODE_PORT}`] }));
 }
 
 const services = {

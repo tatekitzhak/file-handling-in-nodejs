@@ -60,10 +60,10 @@ module.exports = {
                  */
                 console.log('Finally will execute every time');
 
-               /*  let categorie = await CategorieModel.find(); 
-                let subcategorie = await SubcategorieModel.find();
-                console.log('categorie:', categorie.length);
-                console.log('subcategorie:', subcategorie.length); */
+                /*  let categorie = await CategorieModel.find(); 
+                 let subcategorie = await SubcategorieModel.find();
+                 console.log('categorie:', categorie.length);
+                 console.log('subcategorie:', subcategorie.length); */
 
             }
         }
@@ -73,15 +73,22 @@ module.exports = {
     async getCategories() {
         try {
             const categorie = await CategorieModel.find()
-                .populate({
-                    path: 'subcategories',
-                    /*  populate: {
-                         path: 'topics',
-                         select: 'name',
-                     },
-                     options: { lean: true } */
-                });
-            console.log('getCategories:', categorie)
+            // .populate({
+            //     path: 'subcategories',
+            //      populate: {
+            //          path: 'topics',
+            //          select: 'name',
+            //      },
+            //      options: { lean: true }
+            // });
+            CategorieModel.count(function (error, count) {
+                if (error) { 
+                    // return handleError(err) 
+                    console.log('errors: Count Documents')
+                } //handle possible errors
+                else console.log("Count Documents is:", count)
+            });
+
             return categorie;
 
         } catch (err) {

@@ -2,10 +2,10 @@
   "name": "read-file-from-aws-s3",
   "version": "1.0.0",
   "description": "Node JS, Express",
-  "main": "logger.js",
+  "main": "index.js",
   "scripts": {
-    "node": "node index.js",
-    "nodemon": "nodemon index.js",
+    "node:dev": "PORT=8080 NODE_ENV=development nodemon index.js",
+    "node:prod": "PORT=8081 NODE_ENV=production nodemon index.js",
     "logger-dev": "PORT=8080 NODE_ENV=development nodemon logger.js",
     "logger-stage": "NODE_ENV=stage PORT=8001 nodemon logger.js",
     "logger-prod": "PORT=8080 NODE_ENV=production nodemon logger.js",

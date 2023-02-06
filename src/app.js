@@ -6,7 +6,7 @@ const Database = require('./configs/database');
 const { env } = require('./configs/env');
 const { registerMiddlewareServices } = require('./api/middlewares/index');
 
-require('./api/index')(registerMiddlewareServices, 'Startup');
+require('./api/index')(registerMiddlewareServices, env.NODE_ENV);
 
 const PORT = env.NODE_PORT,
 	HOST = env.HOST;
@@ -52,6 +52,6 @@ const PORT = env.NODE_PORT,
 		console.log('error:\n', error)
 	}
 	finally {
-		console.log('app.js finally: ', args)
+		console.log('finally: app.js  ', args)
 	}
-})([{}, {}]);
+})([{ port: env.NODE_PORT }, { env: env.NODE_ENV }]);
