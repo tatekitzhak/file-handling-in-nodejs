@@ -20,6 +20,7 @@ const userSchema = new Schema({
         required: true,
         trim: true,
     },
+    active: { type: Boolean, default: true },
     email: {
         type: String,
         required: true,
@@ -52,16 +53,31 @@ const userSchema = new Schema({
             }
         }
     }, // shorthand for 'age: {type:Number}'
-    phone: {
-        type: String,
-        trim: true,
-        // Validator Library
-        validate(value) {
-            if (!validator.isMobilePhone(value)) {
-                throw new Error("Invalid phone number");
-            }
-        },
-    }
+    contact: {
+        first_name: String,
+        last_name: String,
+        nick_name: String,
+        email: { type: String, required: true, trim: true, lowercase: true, index: { unique: true } },
+        phone: {
+            type: String,
+            required: false,
+            trim: true,
+            // Validator Library
+            validate(value) {
+                if (!validator.isMobilePhone(value)) {
+                    throw new Error("Invalid phone number");
+                }
+            },
+            index: { unique: true, sparse: true }
+        }
+    },
+    auth: {
+        token: { type: String, required: true, default: 'temp' },
+        username: { type: String, required: true, trim: true, lowercase: true, index: { unique: true } },
+        password: { type: String, required: true },
+        login_attempts: { type: Number, required: true, default: 0 },
+        locked_until: { type: Number },
+    },
 }, {
     timestamps: true
 });

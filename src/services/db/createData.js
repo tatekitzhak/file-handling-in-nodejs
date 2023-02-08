@@ -1,9 +1,11 @@
 const ObjectId = require('mongoose').Types.ObjectId;
+const mtime = require('microtime');
 const { CategorieModel, SubcategorieModel, Owner, Shop } = require('../../models/index')
 
 // All Business logic will be here
 module.exports = {
     async createCategories(categories) {
+        const saveStart = mtime.now()
         /**
          * https://stackoverflow.com/questions/10266512/how-can-i-save-multiple-documents-concurrently-in-mongoose-node-js
          * https://forum.freecodecamp.org/t/pushing-mongoose-documents-to-another-document-as-array-elements/400067/3
@@ -53,6 +55,8 @@ module.exports = {
                 new Error("Could not create a new schema model");
             }
             finally {
+                const saveTime = (mtime.now() - saveStart) / 1000
+                process.stdout.write(`save: ${saveTime} ms `)
                 //finallyCode - Code block to be executed regardless of the try result
                 /**
                  * Do some clean up
@@ -82,7 +86,7 @@ module.exports = {
             //      options: { lean: true }
             // });
             CategorieModel.count(function (error, count) {
-                if (error) { 
+                if (error) {
                     // return handleError(err) 
                     console.log('errors: Count Documents')
                 } //handle possible errors
