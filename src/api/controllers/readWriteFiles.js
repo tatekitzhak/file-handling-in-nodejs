@@ -1,14 +1,14 @@
 'use strict'; // eslint-disable-line strict
 
 // const { buildDatabase } = require('./buildDatabase');
-const { createCategories, getCategories } = require('../../services/db/createData');
+const { createCategories, getCategories, createCategoriesAndSubcategorie } = require('../../services/db/createData');
 
 const { readWriteFilesLocalDirectory } = require('../../services/read_write_files_local_directory');
 
 const readWriteFiles = (req, res, next) => {
     const topics = [
         {
-            "name": "ran 1",
+            "category": "ran 1",
             "subcategories": [
                         "111111111",
                         "222222222",
@@ -16,7 +16,7 @@ const readWriteFiles = (req, res, next) => {
             ]
         },
         {
-            "name": "ran 2",
+            "category": "ran 2",
             "subcategories": [
                         "aaaaaa",
                         "bbbbbb",
@@ -24,7 +24,7 @@ const readWriteFiles = (req, res, next) => {
             ]
         },
         {
-            "name": "ran 3",
+            "category": "ran 3",
             "subcategories": [
                 "AAAAAAAAAAA",
                 "BBBBBBBBBBB",
@@ -39,8 +39,8 @@ const readWriteFiles = (req, res, next) => {
             console.log('Missing categories data')
             throw new Error('Missing categories data');
         }
-        // await createCategories(topics)
-        const categories = await getCategories()
+        await createCategoriesAndSubcategorie(topics);
+        // const categories = await getCategories()
 
         if (content.length) {
             res.status(200).json(topics);

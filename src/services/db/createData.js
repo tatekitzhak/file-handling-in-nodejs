@@ -1,4 +1,6 @@
-const ObjectId = require('mongoose').Types.ObjectId;
+const mongoose = require('mongoose');
+var async = require("async");
+var Schema = mongoose.Schema;
 const mtime = require('microtime');
 const { CategorieModel, SubcategorieModel, Owner, Shop } = require('../../models/index')
 
@@ -50,18 +52,20 @@ module.exports = {
                         });
                 }
 
+
             } catch (error) {
                 console.log('error:\n', error);
                 new Error("Could not create a new schema model");
             }
             finally {
-                const saveTime = (mtime.now() - saveStart) / 1000
-                process.stdout.write(`save: ${saveTime} ms `)
+
                 //finallyCode - Code block to be executed regardless of the try result
                 /**
                  * Do some clean up
                  * Do log
                  */
+                const saveTime = (mtime.now() - saveStart) / 1000
+                console.log(`save: ${saveTime} ms `)
                 console.log('Finally will execute every time');
 
                 /*  let categorie = await CategorieModel.find(); 
@@ -72,6 +76,148 @@ module.exports = {
             }
         }
 
+    },
+
+    async createCategoriesAndSubcategorie(multipleDocument) {
+
+        const saveStart = mtime.now()
+
+        const categoriesIfExist = await CategorieModel.find();
+
+        if (categoriesIfExist.length) {
+            throw new Error('Collection documents already exists!');
+        } else {
+            /* const categoryDoc = multipleDocument.pop();
+            console.log('Collection documents is empty:', categoryDoc);
+ */
+
+
+            try {
+                /*
+                var async = require('async');
+
+var arrayOfCategories = [
+  {
+    category: 'ran 1',
+    subcategories: ['review 1', 'review 2', 'review 3'],
+  },
+  {
+    category: 'ran 2',
+    subcategories: ['review - a', 'review - b', 'review - c'],
+  },
+  {
+    category: 'ran 3',
+    subcategories: ['review A', 'review B', 'review C'],
+  },
+];
+
+function createCollection(category, index, callback) {
+  try {
+    // console.log('subcategory, index,:', index, category);
+    async.parallel(
+      {
+        one: function (callback) {
+          callback(null, 'Book\n');
+        },
+        two: function (callback) {
+          callback(null, 'Review\n');
+        },
+      },
+      function (err, results) {
+        // results now equals to: results.one: 'abc\n', results.two: 'xyz\n'
+        //console.log('results:', category);
+        async.map(
+          ['review 1', 'review 2', 'review 3'],
+          createReview,
+          function (err, reviews) {
+            console.log('new Book:', reviews);
+            for (var i = 0; i < reviews.length; i++) {
+              // book.reviews.push(reviews[i]);
+            }
+          }
+        );
+      }
+    );
+    function createReview(body, callback) {
+      console.log('createReview:', body, callback);
+      callback();
+    }
+  } catch (e) {
+    return callback(e);
+  }
+  callback();
+}
+
+async.forEachOf(arrayOfCategories, createCollection, (err) => {
+  if (err) {
+    console.error('err:', err.message);
+    // cb(err.message);
+  } else {
+    console.log('ENDED');
+    // cb('ENDED');
+  }
+});
+
+                */
+
+                var Review = mongoose.model('Review', new Schema({
+                    body: String
+                }));
+
+                var Book = mongoose.model('Book', new Schema({
+                    title: String,
+                    reviews: [{ type: Schema.Types.ObjectId, ref: 'Review' }]
+                }));
+
+                async.parallel([
+                    function (next) { console.log(' Book:',next); Book.deleteOne({}, next); },
+                    function (next) { console.log('Review:',next); Review.deleteOne({}, next); }
+                ],
+                    function () {
+                        async.map(['review 1', 'review 2', 'review 3'], createReview, function (err, reviews) {
+                            var book = new Book({ title: 'something clever' });
+                            console.log('new Book:',reviews)
+                            for (var i = 0; i < reviews.length; i++) {
+                                book.reviews.push(reviews[i]);
+                            }
+
+                            book.save(function (err, doc) {
+                                Book.find({})
+                                    .populate('reviews')
+                                    .exec(function (err, books) {
+                                        console.log('reviews:', err, books);
+                                    });
+                            });
+                        });
+                    }
+                );
+
+                function createReview(body, fn) {
+                    console.log('createReview:', body, fn)
+                    var review = new Review({ body: body });
+                    review.save(fn);
+                }
+
+                // const category = new CategorieModel({ name: 'ran 4' });
+
+                // await category.save(() => console.log('Save successful!'));
+            } catch (error) {
+                console.log('error:\n', error);
+                new Error("Could not create a new schema model");
+            }
+            finally {
+
+                //finallyCode - Code block to be executed regardless of the try result
+                /**
+                 * Do some clean up
+                 * Do log
+                 */
+                const saveTime = (mtime.now() - saveStart) / 1000
+                console.log(`save: ${saveTime} ms `)
+                console.log('Finally will execute every time');
+
+            }
+        }
     },
 
     async getCategories() {

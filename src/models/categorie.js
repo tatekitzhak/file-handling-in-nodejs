@@ -16,7 +16,6 @@ const categorieSchema = new Schema({
     type: [Schema.Types.Mixed],
     lowercase: true,
   },
-  isPublished: Boolean,
   subcategories: [{
     type: ObjectId,
     ref: 'Subcategorie',
