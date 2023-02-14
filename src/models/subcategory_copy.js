@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
 
-const subCategorieSchema = new Schema({
+const subcategorySchema = new Schema({
   name: {
     type: String,
     minlength: 3,
@@ -16,10 +16,9 @@ const subCategorieSchema = new Schema({
     type: [Schema.Types.Mixed],
     lowercase: true,
   },
-  isPublished: Boolean,
   categories: [{
     type: ObjectId,
-    ref: 'Categorie',
+    ref: 'Category',
     required: '{PATH} is required!',
     unique: true
   }],
@@ -32,6 +31,6 @@ const subCategorieSchema = new Schema({
   // versionKey: false
 });
 
-subCategorieSchema.set('versionKey', false);
+subcategorySchema.set('versionKey', false);
 
-module.exports = mongoose.model('Subcategorie', subCategorieSchema);
+module.exports = mongoose.model('Subcategory', subcategorySchema);

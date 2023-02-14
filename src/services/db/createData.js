@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
 var async = require("async");
 var Schema = mongoose.Schema;
+const ObjectId = Schema.Types.ObjectId;
 const mtime = require('microtime');
-const { CategorieModel, SubcategorieModel, Owner, Shop } = require('../../models/index')
+const { CategoryModel, SubcategoryModel } = require('../../models/index')
 
 // All Business logic will be here
 module.exports = {
@@ -19,191 +20,65 @@ module.exports = {
          */
 
 
-        const categoriesIfExist = await CategorieModel.find();
-        if (categoriesIfExist.length) {
-            throw new Error('Collection documents already exists!');
-        } else {
-
-            try {
-
-                for (let i = 0; i < categories.length; i++) {
-                    console.log('categories:\n', categories.length);
-                    await CategorieModel.create({ name: categories[i].name })
-                        .then(async function (categorie) {
-                            for (let s = 0; s < categories[i].subcategories.length; s++) {
-                                console.log('subcategories:\n', categories[i].subcategories.length);
-                                await SubcategorieModel.create({ categories: categorie._id, name: categories[i].subcategories[s] })
-                                    .then(async function (subcategorie) {
-                                        await CategorieModel.findByIdAndUpdate(categorie._id, {
-                                            $push: { subcategories: subcategorie._id }
-                                        }, { 'new': true });
-
-                                    })
-                                    .catch(function (error) {
-                                        console.log('\x1b[36m Error on bundle: SubcategorieModel.create: \x1b[0m:', error)
-                                        new Error("Could not create a new SubcategorieModel");
-                                    });
-
-                            }
-                        })
-                        .catch(function (error) {
-                            console.log('\x1b[36m Error on bundle: CategorieModel.create: \x1b[0m:', error)
-                            new Error("Could not create a new CategorieModel");
-                        });
-                }
-
-
-            } catch (error) {
-                console.log('error:\n', error);
-                new Error("Could not create a new schema model");
-            }
-            finally {
-
-                //finallyCode - Code block to be executed regardless of the try result
-                /**
-                 * Do some clean up
-                 * Do log
-                 */
-                const saveTime = (mtime.now() - saveStart) / 1000
-                console.log(`save: ${saveTime} ms `)
-                console.log('Finally will execute every time');
-
-                /*  let categorie = await CategorieModel.find(); 
-                 let subcategorie = await SubcategorieModel.find();
-                 console.log('categorie:', categorie.length);
-                 console.log('subcategorie:', subcategorie.length); */
-
-            }
-        }
-
     },
 
-    async createCategoriesAndSubcategorie(multipleDocument) {
+    async createCategoriesAndSubcategoriesCollections(multipleDocument) {
 
         const saveStart = mtime.now()
 
-        const categoriesIfExist = await CategorieModel.find();
+        const categoriesIfExist = await CategoryModel.find();
+        const SubcategoryModelIfExist = await SubcategoryModel.find();
 
-        if (categoriesIfExist.length) {
-            throw new Error('Collection documents already exists!');
-        } else {
-            /* const categoryDoc = multipleDocument.pop();
-            console.log('Collection documents is empty:', categoryDoc);
- */
+        if (categoriesIfExist.length || SubcategoryModelIfExist.length) {
 
+            CategoryModel.deleteOne({});
+            SubcategoryModel.deleteOne({});
+            console.log('Collection documents already exists!');
+        }
+
+        function createCollections(arrayOfCategories, index, callback) {
 
             try {
-                /*
-                var async = require('async');
-
-var arrayOfCategories = [
-  {
-    category: 'ran 1',
-    subcategories: ['review 1', 'review 2', 'review 3'],
-  },
-  {
-    category: 'ran 2',
-    subcategories: ['review - a', 'review - b', 'review - c'],
-  },
-  {
-    category: 'ran 3',
-    subcategories: ['review A', 'review B', 'review C'],
-  },
-];
-
-function createCollection(category, index, callback) {
-  try {
-    // console.log('subcategory, index,:', index, category);
-    async.parallel(
-      {
-        one: function (callback) {
-          callback(null, 'Book\n');
-        },
-        two: function (callback) {
-          callback(null, 'Review\n');
-        },
-      },
-      function (err, results) {
-        // results now equals to: results.one: 'abc\n', results.two: 'xyz\n'
-        //console.log('results:', category);
-        async.map(
-          ['review 1', 'review 2', 'review 3'],
-          createReview,
-          function (err, reviews) {
-            console.log('new Book:', reviews);
-            for (var i = 0; i < reviews.length; i++) {
-              // book.reviews.push(reviews[i]);
-            }
-          }
-        );
-      }
-    );
-    function createReview(body, callback) {
-      console.log('createReview:', body, callback);
-      callback();
-    }
-  } catch (e) {
-    return callback(e);
-  }
-  callback();
-}
-
-async.forEachOf(arrayOfCategories, createCollection, (err) => {
-  if (err) {
-    console.error('err:', err.message);
-    // cb(err.message);
-  } else {
-    console.log('ENDED');
-    // cb('ENDED');
-  }
-});
-
-                */
-
-                var Review = mongoose.model('Review', new Schema({
-                    body: String
-                }));
-
-                var Book = mongoose.model('Book', new Schema({
-                    title: String,
-                    reviews: [{ type: Schema.Types.ObjectId, ref: 'Review' }]
-                }));
 
                 async.parallel([
-                    function (next) { console.log(' Book:',next); Book.deleteOne({}, next); },
-                    function (next) { console.log('Review:',next); Review.deleteOne({}, next); }
+                    function (callback) {
+                        console.log(' Book.deleteOne:');
+                        callback(null, 'Book\n');
+                    },
+                    function (callback) {
+                        console.log(' Review.deleteOne:');
+                        callback(null, 'Review\n');
+                    },
                 ],
-                    function () {
-                        async.map(['review 1', 'review 2', 'review 3'], createReview, function (err, reviews) {
-                            var book = new Book({ title: 'something clever' });
-                            console.log('new Book:',reviews)
-                            for (var i = 0; i < reviews.length; i++) {
-                                book.reviews.push(reviews[i]);
+                    async function (err, results) {
+                        await async.map(arrayOfCategories.subcategories, createSubcategory, async function (err, subcategories) {
+                            var category = new CategoryModel({ name: arrayOfCategories.category });
+                            console.log('new Book:', subcategories)
+                            for (var i = 0; i < subcategories.length; i++) {
+                                category.subcategories.push(subcategories[i]);
                             }
 
-                            book.save(function (err, doc) {
-                                Book.find({})
-                                    .populate('reviews')
+                            await category.save(function (err, doc) {
+                                CategoryModel.find({})
+                                    .populate('subcategories')
                                     .exec(function (err, books) {
-                                        console.log('reviews:', err, books);
+                                        console.log('subcategories:', err, books);
                                     });
                             });
                         });
                     }
                 );
 
-                function createReview(body, fn) {
-                    console.log('createReview:', body, fn)
-                    var review = new Review({ body: body });
-                    review.save(fn);
+                function createSubcategory(subcategory, fn) {
+                    console.log('subcategory:', subcategory, fn)
+                    var subcategory = new SubcategoryModel({ name: subcategory });
+                    subcategory.save(fn);
                 }
 
-                // const category = new CategorieModel({ name: 'ran 4' });
-
-                // await category.save(() => console.log('Save successful!'));
             } catch (error) {
-                console.log('error:\n', error);
-                new Error("Could not create a new schema model");
+                console.log('\x1b[36m Error on bundle: categoryModel: \x1b[0m:', error);
+
+                return callback(error);
             }
             finally {
 
@@ -213,25 +88,36 @@ async.forEachOf(arrayOfCategories, createCollection, (err) => {
                  * Do log
                  */
                 const saveTime = (mtime.now() - saveStart) / 1000
-                console.log(`save: ${saveTime} ms `)
+                console.log(`\x1b[save: ${saveTime} \x1b[0m ms `)
                 console.log('Finally will execute every time');
-
+                callback();
             }
+            // callback();
         }
+
+        async.forEachOf(multipleDocument, createCollections, (err) => {
+            if (err) {
+                console.error('err:', err.message);
+                // cb(err.message);
+            } else {
+                console.log('ENDED');
+                // cb('ENDED');
+            }
+        });
     },
 
     async getCategories() {
         try {
-            const categorie = await CategorieModel.find()
-            // .populate({
-            //     path: 'subcategories',
-            //      populate: {
-            //          path: 'topics',
-            //          select: 'name',
-            //      },
-            //      options: { lean: true }
-            // });
-            CategorieModel.count(function (error, count) {
+            const categorie = await CategoryModel.find()
+                .populate({
+                    path: 'subcategories',
+                    //  populate: {
+                    //      path: 'topics',
+                    //      select: 'name',
+                    //  },
+                    options: { lean: true }
+                });
+            CategoryModel.count(function (error, count) {
                 if (error) {
                     // return handleError(err) 
                     console.log('errors: Count Documents')
@@ -246,3 +132,43 @@ async.forEachOf(arrayOfCategories, createCollection, (err) => {
         }
     }
 }
+
+/**
+
+var Category1 = mongoose.model('Category1', new Schema({
+
+                    name: {
+                        type: String,
+                        // required: '{PATH} is required!',
+                        minlength: 3,
+                        maxlength: 255,
+                        unique: true,
+                        uppercase: true
+                    },
+                    subcategories: [{
+                        type: ObjectId,
+                        ref: 'Subcategory1',
+                        unique: true
+                    }],
+                    tags: {
+                        type: [Schema.Types.Mixed],
+                        lowercase: true,
+                    },
+                },
+                    {
+                        timestamps: true,
+                        versionKey: false
+                    }));
+
+                var Subcategory1 = mongoose.model('Subcategory1', new Schema({
+                    name: {
+                        type: String,
+                        minlength: 3,
+                        maxlength: 255,
+                        //   required: function () {
+                        //     return this.categories.require
+                        //   },
+                        unique: true
+                    },
+                }));
+ */

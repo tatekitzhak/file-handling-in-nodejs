@@ -3,7 +3,7 @@ var Schema = mongoose.Schema;
 
 const ObjectId = Schema.Types.ObjectId;
 
-const categorieSchema = new Schema({
+const categorySchema = new Schema({
   name: {
     type: String,
     // required: '{PATH} is required!',
@@ -18,7 +18,7 @@ const categorieSchema = new Schema({
   },
   subcategories: [{
     type: ObjectId,
-    ref: 'Subcategorie',
+    ref: 'Subcategory',
     unique: true
   }]
 }, {
@@ -26,4 +26,4 @@ const categorieSchema = new Schema({
   versionKey: false
 });
 
-module.exports = mongoose.model('Categorie', categorieSchema);
+module.exports = mongoose.model('Category', categorySchema);

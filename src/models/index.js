@@ -1,6 +1,6 @@
 module.exports = {
-  CategorieModel: require('./categorie'),
-  SubcategorieModel: require('./subcategorie'),
+  CategoryModel: require('./category'),
+  SubcategoryModel: require('./subcategory'),
   Owner: require('./store/owner'),
   Shop: require('./store/shop'),
   Product: require('./store/product')
