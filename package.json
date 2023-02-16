@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "node:dev": "PORT=8080 NODE_ENV=development nodemon index.js",
-    "node:prod": "PORT=8081 NODE_ENV=production nodemon index.js",
+    "node:prod": "PORT=8081 NODE_ENV=production index.js",
     "logger-dev": "PORT=8080 NODE_ENV=development nodemon logger.js",
     "logger-stage": "NODE_ENV=stage PORT=8001 nodemon logger.js",
     "logger-prod": "PORT=8080 NODE_ENV=production nodemon logger.js",

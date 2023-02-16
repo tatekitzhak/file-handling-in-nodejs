@@ -8,7 +8,6 @@ const { CategoryModel, SubcategoryModel } = require('../../models/index')
 // All Business logic will be here
 module.exports = {
     async createCategories(categories) {
-        const saveStart = mtime.now()
         /**
          * https://stackoverflow.com/questions/10266512/how-can-i-save-multiple-documents-concurrently-in-mongoose-node-js
          * https://forum.freecodecamp.org/t/pushing-mongoose-documents-to-another-document-as-array-elements/400067/3
@@ -19,91 +18,107 @@ module.exports = {
          * https://masteringjs.io/tutorials/mongoose/array
          */
 
-
     },
 
-    async createCategoriesAndSubcategoriesCollections(multipleDocument) {
-
+    async createCategoriesAndSubcategoriesCollections(newCategoriesDocument) {
         const saveStart = mtime.now()
 
         const categoriesIfExist = await CategoryModel.find();
         const SubcategoryModelIfExist = await SubcategoryModel.find();
 
-        if (categoriesIfExist.length || SubcategoryModelIfExist.length) {
+        let newCategoriesSize;
+        let categoriesCollections;
+        let i = 0;
 
+        if (categoriesIfExist.length || SubcategoryModelIfExist.length) {
+            console.log('Collection documents already exists!');
             CategoryModel.deleteOne({});
             SubcategoryModel.deleteOne({});
-            console.log('Collection documents already exists!');
         }
 
-        function createCollections(arrayOfCategories, index, callback) {
+        do {
 
-            try {
+            function createCollections(arrayOfCategories, index, callback) {
 
-                async.parallel([
-                    function (callback) {
-                        console.log(' Book.deleteOne:');
-                        callback(null, 'Book\n');
+                try {
+
+                    async.parallel({
+                        one: function(callback) {
+                            callback(null, index);
+                        },
+                        two: function(callback) {
+                            callback(null, arrayOfCategories);
+                        }
                     },
-                    function (callback) {
-                        console.log(' Review.deleteOne:');
-                        callback(null, 'Review\n');
-                    },
-                ],
-                    async function (err, results) {
-                        await async.map(arrayOfCategories.subcategories, createSubcategory, async function (err, subcategories) {
-                            var category = new CategoryModel({ name: arrayOfCategories.category });
-                            console.log('new Book:', subcategories)
-                            for (var i = 0; i < subcategories.length; i++) {
-                                category.subcategories.push(subcategories[i]);
-                            }
+                        async function (err, results) {
+                            await async.map(arrayOfCategories.subcategories, createSubcategory, async function (err, subcategories) {
+                                console.log('results:', results);
+                                var category = new CategoryModel({ name: arrayOfCategories.category });
 
-                            await category.save(function (err, doc) {
-                                CategoryModel.find({})
-                                    .populate('subcategories')
-                                    .exec(function (err, books) {
-                                        console.log('subcategories:', err, books);
-                                    });
+                                for (var i = 0; i < subcategories.length; i++) {
+                                    console.log('subcategories.length:', i, subcategories[i])
+                                    category.subcategories.push(subcategories[i]);
+                                }
+
+                                await category.save(function (err, doc) {
+                                    CategoryModel.find({})
+                                        .populate('subcategories')
+                                        .exec(function (err, books) {
+                                            // console.log('subcategories:', err, books);
+                                        });
+                                });
                             });
-                        });
+                        }
+                    );
+
+                    function createSubcategory(subcategory, fn) {
+                        // console.log('subcategory:', subcategory, fn)
+                        var subcategory = new SubcategoryModel({ name: subcategory });
+                        subcategory.save(fn);
                     }
-                );
 
-                function createSubcategory(subcategory, fn) {
-                    console.log('subcategory:', subcategory, fn)
-                    var subcategory = new SubcategoryModel({ name: subcategory });
-                    subcategory.save(fn);
+                } catch (error) {
+                    console.log('\x1b[36m Error on bundle: categoryModel: \x1b[0m:', error);
+
+                    return callback(error);
                 }
+                finally {
 
-            } catch (error) {
-                console.log('\x1b[36m Error on bundle: categoryModel: \x1b[0m:', error);
-
-                return callback(error);
+                    //finallyCode - Code block to be executed regardless of the try result
+                    /**
+                     * Do some clean up
+                     * Do log
+                     */
+                    const saveTime = (mtime.now() - saveStart) / 1000
+                    console.log(`\x1b[save: ${saveTime} \x1b[0m ms `)
+                    console.log('Finally block will execute every time');
+                    callback();
+                }
+                // callback();
             }
-            finally {
 
-                //finallyCode - Code block to be executed regardless of the try result
-                /**
-                 * Do some clean up
-                 * Do log
-                 */
-                const saveTime = (mtime.now() - saveStart) / 1000
-                console.log(`\x1b[save: ${saveTime} \x1b[0m ms `)
-                console.log('Finally will execute every time');
-                callback();
-            }
-            // callback();
-        }
+            async.forEachOf(newCategoriesDocument, createCollections, (err, cb) => {
+                if (err) {
+                    console.error('err:', err.message);
+                    // cb(err.message);
+                } else {
+                    console.log('ENDED');
+                    // cb('ENDED');
+                }
+            });
+            categoriesCollections = await CategoryModel.find();
+            newCategoriesSize = newCategoriesDocument.length;
 
-        async.forEachOf(multipleDocument, createCollections, (err) => {
-            if (err) {
-                console.error('err:', err.message);
-                // cb(err.message);
-            } else {
-                console.log('ENDED');
-                // cb('ENDED');
+            console.log(i, newCategoriesSize, categoriesCollections.length);
+            i++;
+
+            if (newCategoriesSize < categoriesCollections.length || newCategoriesSize > categoriesCollections.length) {
+
+                CategoryModel.deleteOne({});
+                SubcategoryModel.deleteOne({});
+                console.log('Collection documents already exists!');
             }
-        });
+        } while (newCategoriesSize > categoriesCollections.length);
     },
 
     async getCategories() {
@@ -117,6 +132,7 @@ module.exports = {
                     //  },
                     options: { lean: true }
                 });
+
             CategoryModel.count(function (error, count) {
                 if (error) {
                     // return handleError(err) 
@@ -132,43 +148,3 @@ module.exports = {
         }
     }
 }
-
-/**
-
-var Category1 = mongoose.model('Category1', new Schema({
-
-                    name: {
-                        type: String,
-                        // required: '{PATH} is required!',
-                        minlength: 3,
-                        maxlength: 255,
-                        unique: true,
-                        uppercase: true
-                    },
-                    subcategories: [{
-                        type: ObjectId,
-                        ref: 'Subcategory1',
-                        unique: true
-                    }],
-                    tags: {
-                        type: [Schema.Types.Mixed],
-                        lowercase: true,
-                    },
-                },
-                    {
-                        timestamps: true,
-                        versionKey: false
-                    }));
-
-                var Subcategory1 = mongoose.model('Subcategory1', new Schema({
-                    name: {
-                        type: String,
-                        minlength: 3,
-                        maxlength: 255,
-                        //   required: function () {
-                        //     return this.categories.require
-                        //   },
-                        unique: true
-                    },
-                }));
- */
