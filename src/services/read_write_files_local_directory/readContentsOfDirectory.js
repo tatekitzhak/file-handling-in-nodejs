@@ -67,8 +67,8 @@ function readingContentsOfDirectory(dirname, onFileContent) {
                     //match end of string dots and non alphanumeric characters
                     baseFileName = RegExRemoveUnwantedChar.suffix_regex(baseFileName);
 
-                    specificFileSchemaObject.subcategories = arrayOfTextsFromFile;
-                    specificFileSchemaObject.name = baseFileName;
+                    specificFileSchemaObject['subcategories'] = arrayOfTextsFromFile;
+                    specificFileSchemaObject['category'] = baseFileName;
                     contentTopicsCompleted.push(specificFileSchemaObject);
 
                     if (contentTopicsCompleted.length == filesLength) {
